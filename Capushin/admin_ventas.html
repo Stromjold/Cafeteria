@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="Estilos/Admin_ventas.css">
+<link rel="stylesheet" href="Estilos/encavezado.css">
+<title>Registro de Ventas - Cafetería y Dulcería</title>
+</head>
+<body>
+    <header>
+        
+        <a href="configuracion.html" class="logo" title="Inicio">
+            <img src="https://img.icons8.com/?size=48&id=s5NUIabJrb4C&format=png" alt="Logo de Capuchin">
+        </a>
+        <h1>Administracion</h1>
+    </header>
+    <nav>
+        <div class="radio-inputs">
+            <label class="radio">
+                <input type="radio" name="radio" checked="" value="Administracion.html">
+                <span class="name">dashboard</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" value="Inventario.html">
+                <span class="name">Inventario</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" value="personal.html">
+                <span class="name">Empleados</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" checked="" value="admin_ventas.html">
+                <span class="name">Ventas</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" value="finanzas.html">
+                <span class="name">Finanzas</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" value="clientes.html">
+                <span class="name">Clientes</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="radio" value="supervisor.html">
+                <span class="name">Supervisor</span>  
+            </label>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="sistema">Sistema de Gestión de Proveedores y Productos</h1>
+
+        <!-- Sección de Proveedores -->
+        <div class="card">
+            <h2>Proveedores</h2>
+            <div class="form-group">
+                <input type="text" id="newSupplier" placeholder="Nombre del proveedor">
+                <button id="addSupplier" class="btn btn-primary">Agregar Proveedor</button>
+            </div>
+            <ul class="supplier-list" id="supplierList">
+                <li class="no-suppliers">No hay proveedores registrados</li>
+            </ul>
+        </div>
+
+        <!-- Sección de Productos -->
+        <div class="card">
+           <h2>Registro de Productos</h2>
+<form id="productForm" method="POST" action="/PHP/ventas/save_ventas.php">
+    <div class="form-group">
+        <label for="selectedSupplier">Proveedor</label>
+        <select id="selectedSupplier" name="selectedSupplier" required>
+            <option value="">Seleccione un proveedor</option>
+            <!-- Aquí puedes agregar opciones dinámicamente -->
+        </select>
+    </div>
+    <div class="product-form">
+        <div class="form-group">
+            <label for="productName">Producto</label>
+            <input type="text" id="productName" name="productName" placeholder="Nombre del producto" required>
+        </div>
+        <div class="form-group">
+            <label for="productId">ID Producto</label>
+            <input type="text" id="productId" name="productId" placeholder="Identificador del producto" required>
+        </div>
+        <div class="form-group">
+            <label for="expiryDate">Fecha de Vencimiento</label>
+            <input type="date" id="expiryDate" name="expiryDate" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Cantidad</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+            <label for="unitPrice">Precio Unitario</label>
+            <input type="number" id="unitPrice" name="unitPrice" min="0" step="0.01" placeholder="0.00" required>
+        </div>
+    </div>
+    <div class="actions">
+        <button type="submit" id="addProduct" class="btn btn-secondary">Agregar Producto</button>
+        <button type="button" id="clearForm" class="btn btn-danger" onclick="document.getElementById('productForm').reset();">Limpiar Formulario</button>
+    </div>
+</form>
+
+            <h3>Productos Registrados</h3>
+            <div class="table-container">
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Proveedor</th>
+                            <th>Producto</th>
+                            <th>ID Producto</th>
+                            <th>Fecha Venc.</th>
+                            <th>Cantidad</th>
+                            <th>P. Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody">
+                        <tr>
+                            <td colspan="8" class="no-suppliers">No hay productos registrados</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="6">TOTAL</td>
+                            <td id="totalAmount">$0.00</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+ <footer>
+        &copy; 2024 Dulcería - Administración de Finanzas
+    </footer>
+
+    
+</body>
+<script src="js/admin_ventas.js"></script>
+<script src="js/encavesado.js"></script>
+</html>
