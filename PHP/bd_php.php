@@ -1,9 +1,9 @@
 <?php
 // Configuración de la base de datos para XAMPP
 $host = 'localhost';
-$user = 'root'; 
-$pass = 'Labaiep25'; 
-$bd = 'capushin'; 
+$user = ''; 
+$pass = ''; 
+$bd = 'capushin_mountain'; 
 
 // Configuración de caracteres UTF-8
 $charset = 'utf8mb4';

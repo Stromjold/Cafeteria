@@ -31,69 +31,64 @@
                         <input type="checkbox" name="mantener_sesion"> Mantener sesión iniciada en este dispositivo
                     </label>
                     <button type="submit">Iniciar turno</button>
-                </form>
-
-               
-            </div>
+                </form>               
         
+                <button class="supervisor" id="openModalBtn">Contactar supervisor</button>
 
-    
-
-            <button class="supervisor" id="openModalBtn">Contactar supervisor</button>
-
-            <!-- Modal para contactar supervisor -->
-            <div id="supervisorModal" class="modal" style="display: none;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-headset"></i> Contactar Supervisor</h3>
-                        <button class="close-modal" id="closeModalBtn">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="supervisorForm">
-                            <div class="form-group">
-                                <label for="employeeId">ID de Empleado *</label>
-                                <input type="text" id="employeeId" placeholder="Ej. EMP-2023-001" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="problemType">Tipo de problema</label>
-                                <select id="problemType">
-                                    <option value="acceso">Problemas de acceso/login</option>
-                                    <option value="sistema">Problemas técnicos del sistema</option>
-                                    <option value="hardware">Problemas con equipo/hardware</option>
-                                    <option value="procedimiento">Dudas sobre procedimientos</option>
-                                    <option value="emergencia">Emergencia en el turno</option>
-                                    <option value="otro">Otro</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="problemDescription">Descripción del problema *</label>
-                                <textarea 
-                                    id="problemDescription" 
-                                    placeholder="Describe detalladamente el problema que estás experimentando..."
-                                    maxlength="500"
-                                    required
-                                ></textarea>
-                                <div class="char-counter">
-                                    <span id="charCount">500</span> caracteres restantes
+                <!-- Modal para contactar supervisor -->
+                <div id="supervisorModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-headset"></i> Contactar Supervisor</h3>
+                            <button class="close-modal" id="closeModalBtn">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="supervisorForm">
+                                <div class="form-group">
+                                    <label for="employeeId">ID de Empleado *</label>
+                                    <input type="text" id="employeeId" placeholder="Ej. EMP-2023-001" required>
                                 </div>
-                            </div>
 
-                            <div class="urgent-check">
-                                <label>
-                                    <input type="checkbox" id="urgentCheck">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    Marcar como urgente (requiere atención inmediata)
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
-                        <button type="submit" form="supervisorForm" class="btn-primary" id="submitBtn">
-                            <i class="fas fa-paper-plane"></i> Enviar solicitud
-                        </button>
+                                <div class="form-group">
+                                    <label for="problemType">Tipo de problema</label>
+                                    <select id="problemType">
+                                        <option value="acceso">Problemas de acceso/login</option>
+                                        <option value="sistema">Problemas técnicos del sistema</option>
+                                        <option value="hardware">Problemas con equipo/hardware</option>
+                                        <option value="procedimiento">Dudas sobre procedimientos</option>
+                                        <option value="emergencia">Emergencia en el turno</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="problemDescription">Descripción del problema *</label>
+                                    <textarea 
+                                        id="problemDescription" 
+                                        placeholder="Describe detalladamente el problema que estás experimentando..."
+                                        maxlength="500"
+                                        required
+                                    ></textarea>
+                                    <div class="char-counter">
+                                        <span id="charCount">500</span> caracteres restantes
+                                    </div>
+                                </div>
+
+                                <div class="urgent-check">
+                                    <label>
+                                        <input type="checkbox" id="urgentCheck">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Marcar como urgente (requiere atención inmediata)
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
+                            <button type="submit" form="supervisorForm" class="btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i> Enviar solicitud
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
