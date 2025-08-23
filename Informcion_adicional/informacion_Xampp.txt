@@ -1,0 +1,25 @@
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS capuchin_mountains;
+USE capuchin_mountains;
+
+-- Tabla de usuarios (empleados y administradores)
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_empleado VARCHAR(20) UNIQUE NOT NULL,
+    pin VARCHAR(255) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    tipo_usuario ENUM('empleado', 'administrador') NOT NULL DEFAULT 'empleado',
+    activo BOOLEAN DEFAULT TRUE,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimo_acceso TIMESTAMP NULL
+);
+
+-- Insertar datos de ejemplo
+INSERT INTO usuarios (id_empleado, pin, nombre, tipo_usuario) VALUES
+('EMP-2023-001', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Juan Pérez', 'empleado'),
+('EMP-2023-002', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'María García', 'empleado'),
+('ADM-2023-001', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Carlos Rodríguez', 'administrador'),
+('ADM-2023-002', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Ana López', 'administrador');
+
+-- Nota: El PIN encriptado corresponde a "123456" 
+-- En producción, cada usuario debería tener su propio PIN único

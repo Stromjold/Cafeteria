@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capuchin Mountain - Cafetería</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="Estilos/PaginPrincipal.css">
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-[#5a3e2b] text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+                <div class="flex items-center">
+                    <!-- Logo de taza de café -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 1v3M10 1v3M14 1v3" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12c.5-.5 1.5-.5 2 0s1.5.5 2 0" />
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-bold">Capuchin Mountain</h1>
+                        <p class="text-sm text-amber-200">Café & Desayunos</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Botón de Facturas -->
+                    <button id="invoices-btn" class="invoice-button px-4 py-2 rounded-lg font-bold flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Facturas
+                    </button>
+                    <!-- Carrito -->
+                    <div class="relative" id="cart-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <div class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold" id="cart-count">0</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <!-- Category Tabs -->
+            <div class="mb-8 flex flex-wrap justify-center gap-2">
+                <button class="category-btn active px-4 py-2 rounded-full bg-[#7c5a2c] text-white font-medium transition-all" data-category="todos">Todos</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-[#e6d7c3] text-[#5a3e2b] font-medium transition-all" data-category="cafes">Cafés</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-[#e6d7c3] text-[#5a3e2b] font-medium transition-all" data-category="desayunos">Desayunos</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-[#e6d7c3] text-[#5a3e2b] font-medium transition-all" data-category="pasteles">Repostería</button>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="menu-container">
+                <!-- Menu items will be dynamically inserted here -->
+            </div>
+        </main>
+
+        <!-- Invoices Modal -->
+        <div class="fixed inset-0 invoice-modal flex items-center justify-center z-50 hidden" id="invoices-modal">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+                <div class="bg-[#e67e22] text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Facturas</h2>
+                    <button id="close-invoices" class="text-white hover:text-amber-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-grow overflow-y-auto p-6">
+                    <div class="overflow-x-auto">
+                        <table class="invoice-table min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">RUT</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total compra</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Detalle</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="invoices-table-body">
+                                <!-- Invoice items will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Detail Modal -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="invoice-detail-modal">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+                <div class="bg-[#e67e22] text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Detalle de Factura</h2>
+                    <button id="close-invoice-detail" class="text-white hover:text-amber-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4" id="invoice-detail-content">
+                    <!-- Invoice detail will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Modal -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="cart-modal">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+                <div class="bg-[#5a3e2b] text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Tu Pedido</h2>
+                    <button id="close-cart" class="text-white hover:text-amber-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-grow overflow-y-auto p-6" id="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                    <div class="text-center text-gray-500 py-8" id="empty-cart-message">
+                        Tu carrito está vacío
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 p-6 space-y-4">
+                    <div class="flex justify-between font-bold text-lg">
+                        <span>Total:</span>
+                        <span id="cart-total">$0</span>
+                    </div>
+                    <button id="checkout-btn" class="w-full bg-[#5a3e2b] text-white py-3 rounded-lg font-bold hover:bg-[#7c5a2c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Finalizar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finalizar pedido -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="checkout-modal">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+                <div class="bg-[#5a3e2b] text-white px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Finalizar Pedido</h2>
+                    <button id="close-checkout" class="text-white hover:text-amber-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                            <input type="text" id="customer-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7c5a2c]" placeholder="Tu nombre">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">RUT (opcional)</label>
+                            <input type="text" id="customer-rut" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#7c5a2c]" placeholder="12.345.678-9">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Método de pago</label>
+                            <div class="flex items-center space-x-4 mt-1">
+                                <label class="flex items-center">
+                                    <input type="radio" name="payment-method" value="debito" class="mr-2" checked>
+                                    Débito
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="payment-method" value="efectivo" class="mr-2">
+                                    Efectivo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button id="confirm-order" class="w-full bg-[#5a3e2b] text-white py-3 rounded-lg font-bold hover:bg-[#7c5a2c] transition-colors">
+                            Confirmar Pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Confirmation Modal -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="confirmation-modal">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Pedido Confirmado!</h2>
+                    <p class="text-gray-600 mb-6">Tu pedido ha sido recibido y está siendo preparado.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Número de pedido:</span>
+                            <span id="order-number" class="font-bold">#1001</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Fecha:</span>
+                            <span id="order-date" class="font-bold"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-medium">Total:</span>
+                            <span id="confirmation-total" class="font-bold"></span>
+                        </div>
+                    </div>
+                    <button id="close-confirmation" class="w-full bg-[#5a3e2b] text-white py-3 rounded-lg font-bold hover:bg-[#7c5a2c] transition-colors">
+                        Volver al Menú
+                    </button>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <!-- Asistente Virtual -->
+        <div class="assistant-button" id="assistant-button">
+            <div class="pulse" id="assistant-notification"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="12" cy="8" r="5" stroke-width="2" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 8a2 2 0 114 0 2 2 0 01-4 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13v-1a8 8 0 10-16 0v1m16 0v3a4 4 0 01-4 4H8a4 4 0 01-4-4v-3" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v1a3 3 0 006 0v-1" />
+            </svg>
+        </div>
+
+        <div class="assistant-chat" id="assistant-chat">
+            <div class="chat-header">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#5a3e2b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <circle cx="12" cy="8" r="5" stroke-width="2" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 8a2 2 0 114 0 2 2 0 01-4 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13v-1a8 8 0 10-16 0v1m16 0v3a4 4 0 01-4 4H8a4 4 0 01-4-4v-3" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v1a3 3 0 006 0v-1" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">Asistente Virtual</h3>
+                        <p class="text-xs text-amber-200">Siempre disponible para ayudarte</p>
+                    </div>
+                </div>
+                <button id="close-assistant" class="text-white hover:text-amber-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">
+                    ¡Hola! Soy el asistente virtual de Capuchin Mountain. ¿En qué puedo ayudarte hoy?
+                </div>
+                <div class="hidden-assistant" id="typing-indicator">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="user-input" class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#7c5a2c]" placeholder="Escribe tu mensaje...">
+                <button id="send-message" class="bg-[#5a3e2b] text-white px-4 py-2 rounded-r-md hover:bg-[#7c5a2c] transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-[#5a3e2b] text-white py-6">
+            <div class="container mx-auto px-4 text-center">
+                <p>© 2023 Capuchin Mountain - Café & Desayunos</p>
+                <p class="text-sm text-amber-200 mt-1">El mejor café de la montaña</p>
+            </div>
+        </footer>
+    </div>
+<script src="js/PaginPrincipal.js"></script>
+</body>
+</html>

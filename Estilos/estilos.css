@@ -1,0 +1,162 @@
+body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f3e9;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .category-btn.active {
+            background-color: #7c5a2c;
+            color: white;
+        }
+        /* Estilos para el asistente virtual */
+        .assistant-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #5a3e2b;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 40;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .assistant-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .assistant-chat {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 320px;
+            max-height: 400px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 40;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            pointer-events: none;
+        }
+        .assistant-chat.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+        .chat-header {
+            background-color: #5a3e2b;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 16px;
+            overflow-y: auto;
+            max-height: 280px;
+        }
+        .chat-input {
+            border-top: 1px solid #e5e7eb;
+            padding: 12px;
+            display: flex;
+        }
+        .message {
+            margin-bottom: 12px;
+            max-width: 80%;
+        }
+        .message.user {
+            margin-left: auto;
+            background-color: #5a3e2b;
+            color: white;
+            border-radius: 12px 12px 0 12px;
+            padding: 8px 12px;
+        }
+        .message.bot {
+            background-color: #f3f4f6;
+            border-radius: 12px 12px 12px 0;
+            padding: 8px 12px;
+        }
+        .typing-indicator {
+            display: flex;
+            padding: 8px 12px;
+            background-color: #f3f4f6;
+            border-radius: 12px 12px 12px 0;
+            width: fit-content;
+            margin-bottom: 12px;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background-color: #5a3e2b;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 3px;
+            animation: bounce 1.3s linear infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.3s;
+            margin-right: 0;
+        }
+        @keyframes bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-4px);
+            }
+        }
+        .pulse {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #ef4444;
+            border: 2px solid white;
+        }
+        .hidden-assistant {
+            display: none;
+        }
+        /* Estilos para la etiqueta de producto estrella */
+        .star-product {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFD700;
+            color: #5a3e2b;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .star-icon {
+            display: inline-block;
+            color: #5a3e2b;
+        }
+        .menu-item {
+            position: relative;
+        }

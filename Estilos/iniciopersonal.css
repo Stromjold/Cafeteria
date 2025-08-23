@@ -1,0 +1,383 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('../Imagenes/fondo_inicio.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.cerrojo {
+    border-radius: 30px;
+    width: 80%;
+    max-width: 1000px;
+    height: auto;
+    min-height: 500px;
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+    min-height: 500px;
+}
+
+.left {
+    background-color: #4E3F30;
+    color: white;
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right {
+    background-color: white;
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
+}
+
+.left p {
+    margin: 20px 0;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.left ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.left li {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.right p {
+    margin: 0 0 20px 0;
+    color: #666;
+}
+
+input[type="text"], input[type="password"] {
+    margin: 10px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #8B5A3A;
+    box-shadow: 0 0 5px rgba(139, 90, 58, 0.3);
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+    width: auto;
+}
+
+button {
+    background-color: #8B5A3A;  
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #7A4C31;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.footer a {
+    color: #8B5A3A;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .cerrojo {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .container {
+        flex-direction: column;
+    }
+    
+    .left, .right {
+        width: 100%;
+        padding: 30px;
+    }
+    
+    .left {
+        text-align: center;
+    }
+}
+
+/* Estilos del Modal para Contactar Supervisor */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #4E3F30, #6B5B4A);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 15px 15px 0 0;
+    position: relative;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #8B5A3A;
+    box-shadow: 0 0 0 3px rgba(139, 90, 58, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.urgent-check {
+    background-color: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.urgent-check label {
+    display: flex;
+    align-items: center;
+    color: #c53030;
+    font-weight: 600;
+    margin: 0;
+}
+
+.urgent-check input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.modal-footer {
+    padding: 20px 30px 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto;
+    font-weight: normal;
+    margin: 0;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-primary {
+    background-color: #8B5A3A;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto;
+    font-weight: 600;
+    margin: 0;
+}
+
+.btn-primary:hover {
+    background-color: #7A4C31;
+}
+
+.btn-primary:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+
+/* Responsive para el modal */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        padding: 15px 20px 20px;
+    }
+
+    .modal-footer button {
+        width: 100%;
+    }
+}
