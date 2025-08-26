@@ -140,4 +140,32 @@ class Empleado {
         return $dvr == strtoupper($dv);
     }
 }
+
+<?php
+require_once 'Empleado.php';
+
+// Check if the request is a POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get data from the POST request
+    $nombre = $_POST['nombre'] ?? '';
+    $rut = $_POST['rut'] ?? '';
+    $certificado = $_POST['certificado'] ?? '';
+    $experiencia = $_POST['experiencia'] ?? '';
+    $tipo = $_POST['tipo'] ?? ''; // This is the new parameter from personal.js
+
+    // Instantiate the Empleado class
+    $empleado = new Empleado();
+
+    // Call the crear method
+    $result = $empleado->crear($nombre, $rut, $certificado, $experiencia, $tipo);
+    
+    // Return the JSON response from the crear method
+    header('Content-Type: application/json');
+    echo json_encode($result);
+} else {
+    // If it's not a POST request, return an error
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Método de solicitud no válido.']);
+}
+?>
 ?>

@@ -110,4 +110,63 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// New function to handle form submission
+async function handleFormSubmission(form, tipo) {
+  try {
+      const nombre = form.querySelector('input[name="nombre"]').value;
+      const rut = form.querySelector('input[name="rut"]').value;
+      const certificado = form.querySelector('input[name="certificado"]:checked').value;
+      const experiencia = form.querySelector('input[name="experiencia"]').value;
+
+      // Use FormData to send data to PHP
+      const formData = new FormData();
+      formData.append('nombre', nombre);
+      formData.append('rut', rut);
+      formData.append('certificado', certificado);
+      formData.append('experiencia', experiencia);
+      formData.append('tipo', tipo); // Add the employee type
+
+      const response = await fetch('PHP/empleados/crear_empleado.php', {
+          method: 'POST',
+          body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+          alert("Empleado creado exitosamente con ID: " + result.id_empleado);
+          // Optionally, update the table with the new data from the server
+          // You'll need to fetch the updated list or add the new row
+      } else {
+          alert("Error: " + result.message);
+      }
+
+  } catch (error) {
+      console.error('Error:', error);
+      alert("Hubo un problema al conectar con el servidor.");
+  }
+}
+
+// Update the event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  // ... existing navigation code ...
+
+  const asistenteForm = document.getElementById('asistenteForm');
+  if (asistenteForm) {
+      asistenteForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          handleFormSubmission(asistenteForm, 'asistente');
+      });
+  }
+
+  // Repeat for other forms:
+  const adminForm = document.getElementById('adminForm');
+  if (adminForm) {
+      adminForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          handleFormSubmission(adminForm, 'administrador');
+      });
+  }
+  // ... and so on for supervisor, cajero, etc.
+});
 // ...existing code...

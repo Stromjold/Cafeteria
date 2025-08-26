@@ -46,3 +46,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 
 ?>
+
+<?php
+
+// ... (existing code for database connection and sendResponse function) ...
+
+// 3. Procesar datos del formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id_personal = trim($_POST['id_personal'] ?? '');
+    $pin = trim($_POST['pin'] ?? '');
+    $hora_ingreso = date('Y-m-d H:i:s');
+
+    // ... (existing basic validations) ...
+
+    // Correct the table name from 'personal' to 'empleados'
+    $stmt = $conn->prepare("SELECT pin FROM empleados WHERE id_empleado = ?"); // Changed 'id_personal' to 'id_empleado' and table 'personal' to 'empleados'
+    if (!$stmt) {
+        sendResponse(false, "Error en el servidor. Por favor, intenta más tarde.");
+    }
+    
+    $stmt->bind_param("s", $id_personal);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // The ID exists, check the PIN
+        $row = $result->fetch_assoc();
+        if ($row['pin'] === $pin) {
+            // PIN is correct, register the login
+            $stmt_insert = $conn->prepare("INSERT INTO registros_sesion (id_personal, pin_ingresado, hora_ingreso) VALUES (?, ?, ?)");
+            // ... (rest of the code is fine) ...
+        } else {
+            sendResponse(false, "PIN incorrecto. Verifica tu PIN e intenta nuevamente.");
+        }
+    } else {
+        sendResponse(false, "ID de empleado no registrado. Contacta al supervisor si crees que es un error.");
+    }
+
+    $stmt->close();
+} else {
+    sendResponse(false, "Acceso no permitido.");
+}
+
+$conn->close();
+?>
