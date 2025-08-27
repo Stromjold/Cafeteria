@@ -47,7 +47,7 @@ class Empleado {
         $id_empleado = $this->generateId($tipo);
         
         $query = "INSERT INTO {$this->table} (id_empleado, nombre, rut, certificado, experiencia, tipo_empleado) 
-                  VALUES (:id_empleado, :nombre, :rut, :certificado, :experiencia, :tipo)";
+                VALUES (:id_empleado, :nombre, :rut, :certificado, :experiencia, :tipo)";
         
         $this->db->query($query);
         $this->db->bind(':id_empleado', $id_empleado);
