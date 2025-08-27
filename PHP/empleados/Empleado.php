@@ -141,7 +141,7 @@ class Empleado {
     }
 }
 
-<?php
+
 require_once 'Empleado.php';
 
 // Check if the request is a POST request
