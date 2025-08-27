@@ -43,4 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Has marcado la solicitud como urgente.");
         }
     });
+
+    // Solo permitir números en el campo PIN
+    const pinInput = document.getElementById('pinInput');
+    if (pinInput) {
+        pinInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
 });
