@@ -6,10 +6,8 @@
   <title>Panel del Administrador - Capuchin</title>
   <link rel="stylesheet" href="Estilos/personal.css">
   <link rel="stylesheet" href="Estilos/encavezado.css">
-  
 </head>
 <body>
-    
   <header class="encabezado">
     <a href="configuracion.html" class="logo" title="Inicio">
       <img src="https://img.icons8.com/?size=48&id=s5NUIabJrb4C&format=png" alt="Logo de Capuchin">
@@ -19,352 +17,180 @@
 
   <nav>
     <div class="radio-inputs">
-          <label class="radio">
-            <input type="radio" name="radio"  value="Administracion.html">
-            <span class="name">dashboard</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="radio" value="Inventario.html">
-            <span class="name">Inventario</span>
-          </label>
-              
-          <label class="radio">
-            <input type="radio" name="radio" checked="" value="personal.html">
-            <span class="name">Empleados</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="radio" value="admin_ventas.html">
-            <span class="name">Ventas</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="radio" value="finanzas.html">
-            <span class="name">Finanzas</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="radio" value="clientes.html">
-            <span class="name">Clientes</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="radio" value="supervisor.html">
-            <span class="name">Supervisor</span>  
-          </label>
-        </div>
+      <label class="radio">
+        <input type="radio" name="radio" value="Administracion.html">
+        <span class="name">dashboard</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" value="Inventario.html">
+        <span class="name">Inventario</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" checked="" value="personal.html">
+        <span class="name">Empleados</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" value="admin_ventas.html">
+        <span class="name">Ventas</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" value="finanzas.html">
+        <span class="name">Finanzas</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" value="clientes.html">
+        <span class="name">Clientes</span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="radio" value="supervisor.html">
+        <span class="name">Supervisor</span>  
+      </label>
+    </div>
   </nav>
+
+  <div class="container-wrapper">
+    <form id="empleadoForm" method="POST" action="PHP/guardar_empleado.php" class="tableemp">
+        <h2>Registro de Empleado</h2>
+        <table class="table">
+            <tr>
+                <td><label for="empleadoNombre">Nombre Completo</label></td>
+                <td><input type="text" id="empleadoNombre" name="nombre" required minlength="5" maxlength="30"></td>
+            </tr>
+            <tr>
+                <td><label for="empleadoRut">RUT</label></td>
+                <td><input type="text" id="empleadoRut" name="rut" placeholder="12.345.678-9" required></td>
+            </tr>
+            <tr>
+                <td><label for="empleadoTipo">Tipo de Trabajo</label></td>
+                <td>
+                    <select id="empleadoTipo" name="tipo" required>
+                        <option value="Asistente de Gerencia">Asistente de Gerencia</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Cajero">Cajero</option>
+                        <option value="Cocinero">Cocinero</option>
+                        <option value="Limpieza">Limpieza</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="empleadoPin">PIN de acceso</label></td>
+                <td>
+                    <input type="password" id="empleadoPin" name="pin" placeholder="PIN de 6 dígitos" required maxlength="6" pattern="[0-9]{6}" title="Debe contener exactamente 6 dígitos">
+                    <button type="button" id="togglePin" style="margin-left: 10px;">👁️</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Guardar</button></td>
+            </tr>
+        </table>
+    </form>
+
+    <div class="empleados-list" style="margin-top: 30px;">
+        <h3>Empleados Registrados</h3>
+        <div id="listaEmpleados">
+            </div>
+    </div>
+</div>
   
-<div class="container-wrapper">
+  <footer>
+    &copy; 2024 Dulcería - Administración de Finanzas
+  </footer>
 
-    <form id="asistenteForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-        <h2>Asistente de Gerencia</h2>
-          <table class="table">
-              <input type="hidden" id="asistenteId" name="id">
-              <tr>
-                  <td><label for="asistenteNombre">Nombre Completo</label></td>
-                  <td><input type="text" id="asistenteNombre" name="nombre"></td>
-              </tr>
-              <tr>
-                  <td><label for="asistenteRut">RUT</label></td>
-                  <td><input type="text" id="asistenteRut" name="rut" placeholder="12.345.678-9"></td>
-              </tr>
-              <tr>
-                  <td>Certificado</td>
-                  <td>
-                      <label><input type="radio" name="certificado" value="true"> Sí</label>
-                      <label><input type="radio" name="certificado" value="false" checked> No</label>
-                  </td>
-              </tr>
-              <tr>
-                  <td><label for="asistenteExperiencia">Experiencia (años)</label></td>
-                  <td><input type="number" id="asistenteExperiencia" name="experiencia" min="0"></td>
-              </tr>
-              <tr>
-                  <td colspan="2"><button type="submit">Guardar</button></td>
-              </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-          <thead>
-            <tr>
-              <th>id_empleado</th>
-              <th>Nombre</th>
-              <th>RUT</th>
-              <th>Certificado</th>
-              <th>Experiencia (años)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>ASG-001</td>
-              <td>María López</td>
-              <td>12.345.678-9</td>
-              <td>Sí</td>
-              <td>3</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <script>
+    // Script para la navegación de la barra de radio buttons
+    const radios = document.querySelectorAll('input[name="radio"]');
+    radios.forEach(radio => {
+      radio.addEventListener('change', (event) => {
+        window.location.href = event.target.value;
+      });
+    });
 
-      <div class="container-wrapper">
-        <!-- Administrador -->
-        <form id="adminForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-          <h2>Administrador</h2>
-          <table class="table">
-            <input type="hidden" id="adminId" name="id">
-            <tr>
-              <td><label for="adminNombre">Nombre Completo</label></td>
-              <td><input type="text" id="adminNombre" name="nombre"></td>
-            </tr>
-            <tr>
-              <td><label for="adminRut">RUT</label></td>
-              <td><input type="text" id="adminRut" name="rut" placeholder="12.345.678-9"></td>
-            </tr>
-            <tr>
-              <td>Certificado</td>
-              <td>
-                <label><input type="radio" name="certificado" value="true"> Sí</label>
-                <label><input type="radio" name="certificado" value="false" checked> No</label>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="adminExperiencia">Experiencia (años)</label></td>
-              <td><input type="number" id="adminExperiencia" name="experiencia" min="0"></td>
-            </tr>
-            <tr>
-              <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-            <thead>
-              <tr>
-                <th>id_empleado</th>
-                <th>Nombre</th>
-                <th>RUT</th>
-                <th>Certificado</th>
-                <th>Experiencia (años)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>ADM-001</td>
-                <td>Javier Morales</td>
-                <td>13.456.789-0</td>
-                <td>Sí</td>
-                <td>6</td>
-              </tr>
-            </tbody>
-          </table>
-      </div>
+    // Toggle para mostrar/ocultar PIN
+    document.getElementById('togglePin').addEventListener('click', function() {
+      const pinInput = document.getElementById('empleadoPin');
+      if (pinInput.type === 'password') {
+        pinInput.type = 'text';
+        this.textContent = '🙈';
+      } else {
+        pinInput.type = 'password';
+        this.textContent = '👁️';
+      }
+    });
 
-      <div class="container-wrapper">
-      <!-- Supervisor -->
-      <form id="supervisorForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-        <h2>Supervisor</h2>
-          <table class="table">
-            <input type="hidden" id="supervisorId" name="id">
-            <tr>
-              <td><label for="supervisorNombre">Nombre Completo</label></td>
-              <td><input type="text" id="supervisorNombre" name="nombre"></td>
-            </tr>
-            <tr>
-              <td><label for="supervisorRut">RUT</label></td>
-              <td><input type="text" id="supervisorRut" name="rut" placeholder="12.345.678-9"></td>
-            </tr>
-            <tr>
-              <td>Certificado</td>
-              <td>
-                <label><input type="radio" name="certificado" value="true"> Sí</label>
-                <label><input type="radio" name="certificado" value="false" checked> No</label>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="supervisorExperiencia">Experiencia (años)</label></td>
-              <td><input type="number" id="supervisorExperiencia" name="experiencia" min="0"></td>
-            </tr>
-            <tr>
-              <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-          <thead>
-            <tr>
-              <th>id_empleado</th>
-              <th>Nombre</th>
-              <th>RUT</th>
-              <th>Certificado</th>
-              <th>Experiencia (años)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>SUP-001</td>
-              <td>Gabriela Muñoz</td>
-              <td>20.123.456-7</td>
-              <td>Sí</td>
-              <td>5</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    // Validar que solo se ingresen números en el PIN
+    document.getElementById('empleadoPin').addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
 
-      <div class="container-wrapper">
-      <!-- Cajero -->
-        <form id="cajeroForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-          <h2>Cajero</h2>
-          <table class="table">
-            <input type="hidden" id="cajeroId" name="id">
-            <tr>
-              <td><label for="cajeroNombre">Nombre Completo</label></td>
-              <td><input type="text" id="cajeroNombre" name="nombre"></td>
-            </tr>
-            <tr>
-              <td><label for="cajeroRut">RUT</label></td>
-              <td><input type="text" id="cajeroRut" name="rut" placeholder="12.345.678-9"></td>
-            </tr>
-            <tr>
-              <td>Certificado</td>
-              <td>
-                <label><input type="radio" name="certificado" value="true"> Sí</label>
-                <label><input type="radio" name="certificado" value="false" checked> No</label>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="cajeroExperiencia">Experiencia (años)</label></td>
-              <td><input type="number" id="cajeroExperiencia" name="experiencia" min="0"></td>
-            </tr>
-            <tr>
-              <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-          <thead>
-            <tr>
-              <th>id_empleado</th>
-              <th>Nombre</th>
-              <th>RUT</th>
-              <th>Certificado</th>
-              <th>Experiencia (años)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>SUP-001</td>
-              <td>Gabriela Muñoz</td>
-              <td>20.123.456-7</td>
-              <td>Sí</td>
-              <td>5</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    // Manejar envío del formulario
+    document.getElementById('empleadoForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-      <div class="container-wrapper">
-      <!-- Cocinero -->
-        <form id="cocineroForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-          <h2>Cocinero</h2>
-          <table class="table">
-            <input type="hidden" id="cocineroId" name="id">
-            <tr>
-              <td><label for="cocineroNombre">Nombre Completo</label></td>
-              <td><input type="text" id="cocineroNombre" name="nombre"></td>
-            </tr>
-            <tr>
-              <td><label for="cocineroRut">RUT</label></td>
-              <td><input type="text" id="cocineroRut" name="rut" placeholder="12.345.678-9"></td>
-            </tr>
-            <tr>
-              <td>Certificado</td>
-              <td>
-                <label><input type="radio" name="certificado" value="true"> Sí</label>
-                <label><input type="radio" name="certificado" value="false" checked> No</label>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="cocineroExperiencia">Experiencia (años)</label></td>
-              <td><input type="number" id="cocineroExperiencia" name="experiencia" min="0"></td>
-            </tr>
-            <tr>
-              <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-          <thead>
-            <tr>
-              <th>id_empleado</th>
-              <th>Nombre</th>
-              <th>RUT</th>
-              <th>Certificado</th>
-              <th>Experiencia (años)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>COC-001</td>
-              <td>Matías Herrera</td>
-              <td>24.567.890-1</td>
-              <td>Sí</td>
-              <td>8</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      const formData = new FormData(this);
 
-      <div class="container-wrapper">
-      <!-- Personal de limpieza -->
-        <form id="limpiezaForm" method="POST" action="PHP/empleados/Empleado.php" class="tableemp">
-          <h2>Limpieza</h2>
-          <table class="table">
-            <input type="hidden" id="limpiezaId" name="id">
-            <tr>
-              <td><label for="limpiezaNombre">Nombre Completo</label></td>
-              <td><input type="text" id="limpiezaNombre" name="nombre"></td>
-            </tr>
-            <tr>
-              <td><label for="limpiezaRut">RUT</label></td>
-              <td><input type="text" id="limpiezaRut" name="rut" placeholder="12.345.678-9"></td>
-            </tr>
-            <tr>
-              <td>Certificado</td>
-              <td>
-                <label><input type="radio" name="certificado" value="true"> Sí</label>
-                <label><input type="radio" name="certificado" value="false" checked> No</label>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="limpiezaExperiencia">Experiencia (años)</label></td>
-              <td><input type="number" id="limpiezaExperiencia" name="experiencia" min="0"></td>
-            </tr>
-            <tr>
-              <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-          </table>
-        </form>
-        <table id="tablaEmpleados" class="tablefrom">
-          <thead>
-            <tr>
-              <th>id_empleado</th>
-              <th>Nombre</th>
-              <th>RUT</th>
-              <th>Certificado</th>
-              <th>Experiencia (años)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>LIM-001</td>
-              <td>Marcela Díaz</td>
-              <td>28.901.234-5</td>
-              <td>Sí</td>
-              <td>4</td>
-            </tr>
-          </tbody>
-        </table> 
-      </div>
- <footer>
-        &copy; 2024 Dulcería - Administración de Finanzas
-    </footer>
-<script src="js/personal.js"></script>
+      try {
+        const response = await fetch('PHP/guardar_empleado.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(`Empleado registrado exitosamente.\nID: ${result.id_empleado}`);
+          this.reset();
+          cargarEmpleados(); // Recargar la lista
+        } else {
+          alert("Error: " + result.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("Hubo un problema al conectar con el servidor.");
+      }
+    });
+
+    // Función para cargar empleados (opcional)
+    async function cargarEmpleados() {
+      try {
+        const response = await fetch('PHP/obtener_empleados.php');
+        const empleados = await response.json();
+        
+        const lista = document.getElementById('listaEmpleados');
+        lista.innerHTML = '';
+        
+        empleados.forEach(emp => {
+          const div = document.createElement('div');
+          div.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;';
+          div.innerHTML = `
+            <strong>${emp.nombre}</strong> - ${emp.id_personal}<br>
+            <small>RUT: ${emp.rut} | Rol: ${emp.rol}</small>
+          `;
+          lista.appendChild(div);
+        });
+      } catch (error) {
+        console.error('Error al cargar empleados:', error);
+      }
+    }
+
+    // Cargar empleados al iniciar la página
+    document.addEventListener('DOMContentLoaded', cargarEmpleados);
+    document.addEventListener('DOMContentLoaded', function() {
+        const nombreInput = document.getElementById('empleadoNombre');
+
+        nombreInput.addEventListener('input', function(event) {
+            // Obtiene el valor actual del campo
+            const valor = event.target.value;
+            // Define la expresión regular: solo permite letras (con o sin acentos), espacios, y la letra 'ñ'.
+            const regex = /[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g;
+            
+            // Reemplaza los caracteres no permitidos por una cadena vacía
+            const valorFiltrado = valor.replace(regex, '');
+
+            // Actualiza el valor del campo con la versión filtrada
+            event.target.value = valorFiltrado;
+        });
+    });
+  </script>
 </body>
 </html>

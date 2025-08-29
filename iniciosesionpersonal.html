@@ -25,18 +25,18 @@
                 
                 <!-- Formulario de login -->
                 <form method="POST" action="PHP/registro.php">
-                    <input type="text" name="id_personal" placeholder="ID de Empleado (Ej. EMP-2023-001)" required>
-                    <div class="password-container">
-                        <input type="password" id="pinInput" name="pin" placeholder="Ingresa tu PIN de 6 dígitos" required maxlength="6" pattern="[0-9]{6}">
-                        <button type="button" class="show-pin-btn" id="showPinBtn">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <label>
-                        <input type="checkbox" name="mantener_sesion"> Mantener sesión iniciada en este dispositivo
-                    </label>
-                    <button type="submit">Iniciar turno</button>    
-                </form>               
+                <input type="text" name="id_personal" placeholder="ID de Empleado (Ej. EMP-001)" required>
+                <div class="password-container">
+                    <input type="password" id="pinInput" name="pin" placeholder="Ingresa tu PIN de 6 dígitos" required maxlength="6" pattern="[0-9]{6}">
+                    <button type="button" class="show-pin-btn" id="showPinBtn">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <label>
+                    <input type="checkbox" name="mantener_sesion"> Mantener sesión iniciada en este dispositivo
+                </label>
+                <button type="submit">Iniciar turno</button>    
+            </form>              
         
                 <button class="supervisor" id="openModalBtn">Contactar supervisor</button>
 
@@ -104,18 +104,7 @@
 
     <script src="js/iniciopersonal.js"></script>
     <script>
-        document.getElementById('submitBtn').addEventListener('click', function(event) {
-            event.preventDefault(); // Evita el comportamiento predeterminado del botón
-
-            // Mostrar notificación
-            alert('Mensaje enviado');
-
-            // Cerrar la ventana modal
-            const modal = document.querySelector('.modal'); // Ajusta el selector según tu estructura
-            if (modal) {
-                modal.style.display = 'none';
-            }
-        });
+        
     </script>
 </body>
 </html>

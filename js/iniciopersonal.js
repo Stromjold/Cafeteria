@@ -52,3 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+document.getElementById('submitBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita el comportamiento predeterminado del botón
+
+            // Mostrar notificación
+            alert('Mensaje enviado');
+
+            // Cerrar la ventana modal
+            const modal = document.querySelector('.modal'); // Ajusta el selector según tu estructura
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
