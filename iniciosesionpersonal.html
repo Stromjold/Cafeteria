@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio Sesion - Empleado</title>
+    <title>Inicio Sesión - Empleado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="Estilos/iniciopersonal.css">
 </head>
 <body>
     <div class="cerrojo">
         <div class="container">
+            <!-- Panel Izquierdo -->
             <div class="left">
                 <h1>Capuchin Mountains</h1>
                 <h2>Portal de Empleados</h2>
@@ -19,34 +21,64 @@
                     <li>🧾 Registro de ventas</li>
                 </ul>
             </div>
+
+            <!-- Panel Derecho -->
             <div class="right">
                 <h2>Iniciar sesión</h2>
-                <p>Ingresa tus credenciales para comenzar tu turno </p>
+                <p>Ingresa tus credenciales para comenzar tu turno</p>
                 
-                <!-- Formulario de login -->
-                <form method="POST" action="PHP/registro.php">
-                <input type="text" name="id_personal" placeholder="ID de Empleado (Ej. EMP-001)" required>
-                <div class="password-container">
-                    <input type="password" id="pinInput" name="pin" placeholder="Ingresa tu PIN de 6 dígitos" required maxlength="6" pattern="[0-9]{6}">
-                    <button type="button" class="show-pin-btn" id="showPinBtn">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-                <label>
-                    <input type="checkbox" name="mantener_sesion"> Mantener sesión iniciada en este dispositivo
-                </label>
-                <button type="submit">Iniciar turno</button>    
-            </form>              
-        
-                <button class="supervisor" id="openModalBtn">Contactar supervisor</button>
+                <form method="POST" action="PHP/registro.php" class="login-form">
+                    <!-- Campo ID de Empleado -->
+                    <div class="form-group">
+                        <input type="text" 
+                        name="id_personal" 
+                        class="form-input"
+                        placeholder="ID de Empleado (Ej. EMP-001)" 
+                        required>
+                    </div>
 
-                <!-- Modal para contactar supervisor -->
-                <div id="supervisorModal" class="modal" style="display: none;">
+                    <!-- Campo PIN -->
+                    <div class="form-group">
+                        <div class="password-container">
+                            <input type="password" 
+                                id="pinInput" 
+                                name="pin" 
+                                class="form-input"
+                                placeholder="Ingresa tu PIN de 6 dígitos" 
+                                required 
+                                maxlength="6" 
+                                pattern="[0-9]{6}">
+                            <button type="button" class="show-pin-btn" id="showPinBtn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Checkbox -->
+                    <div class="checkbox-container">
+                        <input type="checkbox" name="mantener_sesion" id="keepSession">
+                        <label for="keepSession">Mantener sesión iniciada en este dispositivo</label>
+                    </div>
+
+                    <!-- Botón Submit -->
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar turno
+                    </button>
+                </form>
+
+                <!-- Botón Contactar Supervisor -->
+                <button class="btn btn-secondary" id="openModalBtn">
+                    <i class="fas fa-headset"></i> Contactar supervisor
+                </button>
+
+                <!-- Modal -->
+                <div id="supervisorModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h3><i class="fas fa-headset"></i> Contactar Supervisor</h3>
                             <button class="close-modal" id="closeModalBtn">&times;</button>
                         </div>
+                        
                         <div class="modal-body">
                             <form id="supervisorForm">
                                 <div class="form-group">
@@ -75,7 +107,7 @@
                                         required
                                     ></textarea>
                                     <div class="char-counter">
-                                        <span id="charCount">20</span> caracteres restantes
+                                        <span id="charCount">500</span> caracteres restantes
                                     </div>
                                 </div>
 
@@ -88,9 +120,12 @@
                                 </div>
                             </form>
                         </div>
+                        
                         <div class="modal-footer">
-                            <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
-                            <button type="submit" form="supervisorForm" class="btn-primary" id="submitBtn">
+                            <button type="button" class="btn btn-secondary" id="cancelBtn">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" form="supervisorForm" class="btn btn-primary" id="submitBtn">
                                 <i class="fas fa-paper-plane"></i> Enviar solicitud
                             </button>
                         </div>
@@ -100,11 +135,6 @@
         </div>
     </div>
 
-    
-
     <script src="js/iniciopersonal.js"></script>
-    <script>
-        
-    </script>
 </body>
 </html>

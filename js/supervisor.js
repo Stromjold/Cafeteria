@@ -131,7 +131,7 @@
         if (employeeID && message) {
             document.getElementById('infoDisplay').innerHTML = 
                 `<p>ID de Empleado: ${employeeID}</p>
-                 <p>Mensaje: ${message}</p>`;
+                <p>Mensaje: ${message}</p>`;
         } else {
             document.getElementById('infoDisplay').innerText = "No se recibieron datos.";
         }
