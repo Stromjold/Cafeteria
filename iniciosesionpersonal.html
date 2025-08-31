@@ -10,7 +10,6 @@
 <body>
     <div class="cerrojo">
         <div class="container">
-            <!-- Panel Izquierdo -->
             <div class="left">
                 <h1>Capuchin Mountains</h1>
                 <h2>Portal de Empleados</h2>
@@ -22,13 +21,11 @@
                 </ul>
             </div>
 
-            <!-- Panel Derecho -->
             <div class="right">
                 <h2>Iniciar sesión</h2>
                 <p>Ingresa tus credenciales para comenzar tu turno</p>
                 
                 <form method="POST" action="PHP/registro.php" class="login-form">
-                    <!-- Campo ID de Empleado -->
                     <div class="form-group">
                         <input type="text" 
                         name="id_personal" 
@@ -36,8 +33,6 @@
                         placeholder="ID de Empleado (Ej. EMP-001)" 
                         required>
                     </div>
-
-                    <!-- Campo PIN -->
                     <div class="form-group">
                         <div class="password-container">
                             <input type="password" 
@@ -53,25 +48,18 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Checkbox -->
                     <div class="checkbox-container">
                         <input type="checkbox" name="mantener_sesion" id="keepSession">
                         <label for="keepSession">Mantener sesión iniciada en este dispositivo</label>
                     </div>
-
-                    <!-- Botón Submit -->
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt"></i> Iniciar turno
                     </button>
                 </form>
-
-                <!-- Botón Contactar Supervisor -->
                 <button class="btn btn-secondary" id="openModalBtn">
                     <i class="fas fa-headset"></i> Contactar supervisor
                 </button>
 
-                <!-- Modal -->
                 <div id="supervisorModal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">

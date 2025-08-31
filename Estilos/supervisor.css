@@ -425,3 +425,71 @@
         min-width: auto;
       }
     }
+
+/* Estilos para las tarjetas de solicitud */
+.request-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.request-card.urgent {
+    border-left: 5px solid #e74c3c; /* Borde rojo para solicitudes urgentes */
+}
+
+.request-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.request-card .card-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.request-card .card-header .timestamp {
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.request-card .card-body p {
+    margin: 5px 0;
+    color: #34495e;
+}
+
+.request-card .card-body strong {
+    color: #2c3e50;
+}
+
+.request-card .problem-description {
+    background-color: #f9f9f9;
+    border-left: 3px solid #3498db;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+
+.request-card .problem-description h4 {
+    margin-top: 0;
+    color: #2980b9;
+}
+
+.no-requests-message {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    margin-top: 50px;
+}
