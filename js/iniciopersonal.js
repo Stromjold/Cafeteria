@@ -21,7 +21,8 @@ class EmployeeLoginSystem {
         this.showPinBtn = document.querySelector("#showPinBtn");
         this.urgentCheck = document.querySelector("#urgentCheck");
         this.supervisorForm = document.querySelector("#supervisorForm");
-        this.employeeIdInput = document.querySelector("##employeeId");
+        // CORRECCIÓN: Se agrega la referencia correcta al ID del input
+        this.employeeIdInput = document.querySelector("#employeeId");
         this.problemTypeSelect = document.querySelector("#problemType");
     }
 
@@ -47,11 +48,15 @@ class EmployeeLoginSystem {
     
     // ==================== FUNCIONES DEL MODAL ==================== 
     openModal() {
+        if (!this.modal) return;
         this.modal.style.display = "flex";
-        this.textarea.focus();
+        if (this.textarea) {
+            this.textarea.focus();
+        }
     }
 
     closeModal() {
+        if (!this.modal) return;
         this.modal.style.display = "none";
     }
 
@@ -63,6 +68,11 @@ class EmployeeLoginSystem {
     
     // ==================== MANEJO DE LA SOLICITUD ==================== 
     submitRequestToSupervisor() {
+        if (!this.employeeIdInput || !this.problemTypeSelect || !this.textarea || !this.urgentCheck) {
+            console.error("Faltan elementos del formulario.");
+            return;
+        }
+
         const employeeID = this.employeeIdInput.value.trim();
         const problemType = this.problemTypeSelect.value;
         const problemMessage = this.textarea.value.trim();
