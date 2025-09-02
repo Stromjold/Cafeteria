@@ -51,7 +51,7 @@ INSERT INTO `empleados` (`id`, `id_personal`, `nombre`, `rut`, `pin`, `rol`, `fe
 (2, 'ADM-871', 'Rojelio Cerda', '14.265.487-2', '$2y$10$DjcrkhgcomcbeLc67NK.i.6U5fLVR1l0jk1.awJCkasn84T99aPmO', 'Administrador', '2025-08-28 22:59:11', 1),
 (3, 'CAJ-299', 'mark', '89.593.487-7', '$2y$10$4JPVsXtncRGT6E5XAc7VYOHNAq2YG5NiKxr8uzsC3oI8zbv8/6dJe', 'Cajero', '2025-08-28 23:01:44', 1),
 (4, 'COC-782', 'Cafe Africano', '21.793.214-9', '$2y$10$Rp.iWiIGenZJPsI9/L.fle/PB7U16JVY59OFNwvXfrWowAQ8Z1.Qu', 'Cocinero', '2025-08-28 23:03:29', 1),
-(5, 'SUP-058', 'dsae@\"\"', '34.343.343-9', '$2y$10$LBGnlYvyWhwsjI/qjI6AOep4gQkE61buAN5YrfqhSRoM2PCkG3SSS', 'Supervisor', '2025-08-28 23:11:16', 1),
+(5, 'SUP-058', 'dsae@""', '34.343.343-9', '$2y$10$LBGnlYvyWhwsjI/qjI6AOep4gQkE61buAN5YrfqhSRoM2PCkG3SSS', 'Supervisor', '2025-08-28 23:11:16', 1),
 (6, 'ASG-179', 'sam', '45.876.234-6', '$2y$10$4dVH8wnDP8.6nNQHheoyE.AT6xYc3gPILCAnr/2qFBVNx2SAsPs2G', 'Asistente de Gerencia', '2025-08-28 23:23:12', 1),
 (7, 'ASG-590', 'suro', '16.887.941-5', '$2y$10$FokPcflm8J/1XFkOlhY9tOwTY.piRa1U5/2nJdv.xfGMu8uHqA3W.', 'Asistente de Gerencia', '2025-08-28 23:43:04', 1),
 (8, 'SUP-320', 'uytr', '12.870.631-3', '$2y$10$bRtlAXFOKqbUmAmS3h5U0OXq69qxwXSdG93ZE879kl/mUjwssSo7u', 'Supervisor', '2025-08-28 23:44:37', 1),
