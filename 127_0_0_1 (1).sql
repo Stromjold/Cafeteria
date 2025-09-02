@@ -48,7 +48,7 @@ CREATE TABLE `empleados` (
 
 INSERT INTO `empleados` (`id`, `id_personal`, `nombre`, `rut`, `pin`, `rol`, `fecha_registro`, `activo`) VALUES
 (1, 'ASG-322', 'rgrgergg', '24.039.438-3', '$2y$10$raEFGImpa34j.1B3SP6J8OM44vs6nIbXXgWZ1ilRaXCXMg.1O6uqG', 'Asistente de Gerencia', '2025-08-28 22:53:22', 1),
-(2, 'ADM-871', 'Rojelio Cerda', '14.265.487-2', '$2y$10$DjcrkhgcomcbeLc67NK.i.6U5fLVR4l0jk1.awJCkasn84T99aPmO', 'Administrador', '2025-08-28 22:59:11', 1),
+(2, 'ADM-871', 'Rojelio Cerda', '14.265.487-2', '$2y$10$DjcrkhgcomcbeLc67NK.i.6U5fLVR1l0jk1.awJCkasn84T99aPmO', 'Administrador', '2025-08-28 22:59:11', 1),
 (3, 'CAJ-299', 'mark', '89.593.487-7', '$2y$10$4JPVsXtncRGT6E5XAc7VYOHNAq2YG5NiKxr8uzsC3oI8zbv8/6dJe', 'Cajero', '2025-08-28 23:01:44', 1),
 (4, 'COC-782', 'Cafe Africano', '21.793.214-9', '$2y$10$Rp.iWiIGenZJPsI9/L.fle/PB7U16JVY59OFNwvXfrWowAQ8Z1.Qu', 'Cocinero', '2025-08-28 23:03:29', 1),
 (5, 'SUP-058', 'dsae@\"\"', '34.343.343-9', '$2y$10$LBGnlYvyWhwsjI/qjI6AOep4gQkE61buAN5YrfqhSRoM2PCkG3SSS', 'Supervisor', '2025-08-28 23:11:16', 1),
@@ -58,12 +58,25 @@ INSERT INTO `empleados` (`id`, `id_personal`, `nombre`, `rut`, `pin`, `rol`, `fe
 (9, 'ADM-788', 'MARK', '67.678.234-6', '$2y$10$HvNMV5K8Fa/RzsHY8KXKp.gtIH8Ubzsd6vCgo2NOfyYEOWaNqBMiO', 'Administrador', '2025-08-29 01:41:54', 1),
 (10, 'ADM-707', 'Juan Antonio', '7.538.629-k', '$2y$10$hcMb5m6bn4uOSkQfJp98R.yD3xhsETfN6PA7D5b214.yOQB58EyD.', 'Administrador', '2025-08-29 01:47:35', 1);
 
---
--- Índices para tablas volcadas
---
+-- --------------------------------------------------------
 
 --
--- Indices de la tabla `empleados`
+-- Estructura de tabla para la tabla `productos`
+--
+
+CREATE TABLE `productos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(255) NOT NULL,
+  `proveedor` VARCHAR(255) NOT NULL,
+  `id_producto` VARCHAR(50) NOT NULL,
+  `fecha_vencimiento` DATE NOT NULL,
+  `cantidad` INT(11) NOT NULL,
+  `precio_unitario` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Índices para tablas volcadas
 --
 ALTER TABLE `empleados`
   ADD PRIMARY KEY (`id`),
@@ -74,10 +87,6 @@ ALTER TABLE `empleados`
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;

@@ -31,7 +31,7 @@
             </label>
             <label class="radio">
                 <input type="radio" name="radio" checked="" value="admin_ventas.html">
-                <span class="name">Ventas</span>
+                <span class="name">Productos</span>
             </label>
             <label class="radio">
                 <input type="radio" name="radio" value="finanzas.html">
@@ -39,7 +39,7 @@
             </label>
             <label class="radio">
                 <input type="radio" name="radio" value="clientes.html">
-                <span class="name">Clientes</span>
+                <span class="name">Ventas</span>
             </label>
             <label class="radio">
                 <input type="radio" name="radio" value="supervisor.html">
@@ -96,9 +96,10 @@
             <input type="number" id="unitPrice" name="unitPrice" min="0" step="0.01" placeholder="0.00" required>
         </div>
     </div>
-    <div class="actions">
+        <div class="actions">
         <button type="submit" id="addProduct" class="btn btn-secondary">Agregar Producto</button>
         <button type="button" id="clearForm" class="btn btn-danger" onclick="document.getElementById('productForm').reset();">Limpiar Formulario</button>
+        <button type="button" id="updateProduct" class="btn btn-info">Actualizar Sistema</button>
     </div>
 </form>
 
