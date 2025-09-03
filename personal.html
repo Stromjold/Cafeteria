@@ -55,8 +55,8 @@
       <h3>Registrar Nuevo Empleado</h3>
       <form id="empleadoForm" class="login-form">
         <input type="text" name="nombre" placeholder="Nombre Completo" required>
-        <input type="text" name="rut" placeholder="RUT (sin puntos ni guion)" required>
-        <input type="number" name="pin" placeholder="PIN de 6 dígitos" minlength="6" maxlength="6" required>
+        <input type="text" name="rut" id="rutInput" placeholder="RUT" onkeyup="formatearRut(this)" maxlength="12" required>
+        <input type="text" name="pin" placeholder="PIN de 6 dígitos"  maxlength="6" required>
         <select name="tipo" required>
           <option value="">Seleccione un Rol</option>
           <option value="Asistente de Gerencia">Asistente de Gerencia</option>
@@ -100,6 +100,6 @@
     </div>
   </main>
   
-  <script src="personal.js"></script>
+  <script src="js/personal.js"></script>
 </body>
 </html>

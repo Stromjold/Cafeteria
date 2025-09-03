@@ -133,3 +133,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Cargar empleados al iniciar la página
   cargarEmpleados();
 });
+
+function formatearRut(input) {
+  let rut = input.value.replace(/\./g, '').replace(/-/g, '');
+
+  if (rut.length > 1) {
+    let cuerpo = rut.slice(0, -1);
+    let dv = rut.slice(-1).toUpperCase();
+    
+    cuerpo = cuerpo.split('').reverse().join('').match(/.{1,3}/g).join('.').split('').reverse().join('');
+    
+    input.value = cuerpo + '-' + dv;
+  }
+}
