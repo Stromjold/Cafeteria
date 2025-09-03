@@ -13,47 +13,123 @@ document.addEventListener('DOMContentLoaded', function () {
 //=================================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener el formulario principal (el que tiene el id del empleado)
-    const empleadoForm = document.getElementById('empleadoForm');
-
-    // Verificar si el formulario existe
-    if (empleadoForm) {
-        empleadoForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Obtener los valores del formulario
-            const nombre = empleadoForm.querySelector('input[name="nombre"]').value;
-            const rut = empleadoForm.querySelector('input[name="rut"]').value;
-            const tipo = empleadoForm.querySelector('select[name="tipo"]').value;
-
-            // Crear un objeto FormData para enviar los datos al servidor
-            const formData = new FormData();
-            formData.append('nombre', nombre);
-            formData.append('rut', rut);
-            formData.append('tipo', tipo);
-
-            try {
-                // Enviar los datos a guardar_empleado.php
-                const response = await fetch('PHP/guardar_empleado.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                // Convertir la respuesta a JSON
-                const result = await response.json();
-
-                // Verificar si el registro fue exitoso y mostrar un mensaje
-                if (result.success) {
-                    alert("Empleado registrado exitosamente. ID: " + result.id_empleado + " - PIN: " + result.pin_generado);
-                    empleadoForm.reset(); // Limpiar el formulario después del éxito
-                } else {
-                    alert("Error: " + result.message);
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert("Hubo un problema al conectar con el servidor.");
-            }
+  // Lógica para registrar un nuevo empleado
+  const empleadoForm = document.getElementById('empleadoForm');
+  if (empleadoForm) {
+    empleadoForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      try {
+        const response = await fetch('PHP/guardar_empleado.php', {
+          method: 'POST',
+          body: formData
         });
+        const result = await response.json();
+        if (result.success) {
+          alert("Empleado registrado exitosamente. ID: " + result.id_empleado);
+          this.reset();
+          cargarEmpleados();
+        } else {
+          alert("Error: " + result.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("Hubo un problema al conectar con el servidor.");
+      }
+    });
+  }
+
+  // ==================== LÓGICA PARA EDICIÓN DE EMPLEADOS (NUEVA) ====================
+  const empleadoEditForm = document.getElementById('empleadoEditForm');
+  const buscarBtn = document.getElementById('buscarEmpleadoBtn');
+  const editFields = document.getElementById('editFields');
+  
+  if (empleadoEditForm && buscarBtn) {
+    buscarBtn.addEventListener('click', async () => {
+      const id_personal = empleadoEditForm.querySelector('input[name="id_personal"]').value;
+      if (id_personal) {
+        try {
+          const response = await fetch(`PHP/obtener_empleado.php?id_personal=${id_personal}`);
+          const empleado = await response.json();
+          if (empleado.id_personal) {
+            empleadoEditForm.querySelector('input[name="nombre_edit"]').value = empleado.nombre;
+            empleadoEditForm.querySelector('input[name="rut_edit"]').value = empleado.rut;
+            empleadoEditForm.querySelector('select[name="tipo_edit"]').value = empleado.rol;
+            editFields.style.display = 'block';
+          } else {
+            alert("No se encontró un empleado con ese ID.");
+            editFields.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert("Hubo un problema al buscar al empleado.");
+        }
+      } else {
+        alert("Por favor, ingrese un ID de empleado.");
+      }
+    });
+
+    empleadoEditForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id_personal = empleadoEditForm.querySelector('input[name="id_personal"]').value;
+      const nombre_edit = empleadoEditForm.querySelector('input[name="nombre_edit"]').value;
+      const rut_edit = empleadoEditForm.querySelector('input[name="rut_edit"]').value;
+      const tipo_edit = empleadoEditForm.querySelector('select[name="tipo_edit"]').value;
+
+      const formData = new FormData();
+      formData.append('id_personal', id_personal);
+      formData.append('nombre', nombre_edit);
+      formData.append('rut', rut_edit);
+      formData.append('rol', tipo_edit);
+
+      try {
+        const response = await fetch('PHP/editar_empleado.php', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert("Empleado actualizado exitosamente.");
+          empleadoEditForm.reset();
+          editFields.style.display = 'none';
+          cargarEmpleados(); // Recargar la lista de empleados
+        } else {
+          alert("Error: " + result.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert("Hubo un problema al conectar con el servidor.");
+      }
+    });
+  }
+
+  // Lógica para cargar la lista de empleados
+  async function cargarEmpleados() {
+    try {
+      const response = await fetch('PHP/obtener_empleados.php');
+      const empleados = await response.json();
+      const lista = document.getElementById('listaEmpleados');
+      lista.innerHTML = '';
+      if (empleados.length > 0) {
+        empleados.forEach(emp => {
+          const div = document.createElement('div');
+          div.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;';
+          div.innerHTML = `
+            <strong>${emp.nombre}</strong> - ${emp.id_personal}<br>
+            <small>RUT: ${emp.rut} | Rol: ${emp.rol}</small>
+          `;
+          lista.appendChild(div);
+        });
+      } else {
+        lista.innerHTML = '<p>No hay empleados registrados.</p>';
+      }
+    } catch (error) {
+      console.error('Error al cargar empleados:', error);
+      const lista = document.getElementById('listaEmpleados');
+      lista.innerHTML = '<p>No se pudo cargar la lista de empleados.</p>';
     }
+  }
+
+  // Cargar empleados al iniciar la página
+  cargarEmpleados();
 });

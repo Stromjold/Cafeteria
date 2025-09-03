@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         { id: 'prov2', name: 'Dulces Delicia Ltda.' },
         { id: 'prov3', name: 'Café y Pasteles' }
     ];
+    // products ya no se necesita aquí, ya que se manejará con la base de datos
     let products = JSON.parse(localStorage.getItem('products')) || [];
 
     const productForm = document.querySelector('#productForm');
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 supplierList.appendChild(li);
 
                 const option = document.createElement('option');
-                option.value = supplier.id;
+                option.value = supplier.name; // Usar el nombre como valor para la BD
                 option.textContent = supplier.name;
                 selectedSupplierDropdown.appendChild(option);
             });
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const newSupplierName = newSupplierInput.value.trim();
         if (newSupplierName) {
             const newSupplier = {
-                id: `prov${Date.now()}`, // Usa un ID único basado en la marca de tiempo
+                id: `prov${Date.now()}`, 
                 name: newSupplierName
             };
             suppliers.push(newSupplier);
@@ -53,47 +54,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     // Función para manejar el envío del formulario y guardar el producto en localStorage
+    // ¡Se eliminó e.preventDefault()!
     productForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+        // e.preventDefault(); // <-- ¡Esta línea fue eliminada!
         
-        const supplierId = selectedSupplierDropdown.value;
-        const productName = document.querySelector('#productName').value.trim();
-        const productId = document.querySelector('#productId').value.trim();
-        const expiryDate = document.querySelector('#expiryDate').value;
-        const quantity = parseInt(document.querySelector('#quantity').value);
-        const unitPrice = parseFloat(document.querySelector('#unitPrice').value);
+        // Ya no se necesita el código para guardar en localStorage
+        // El formulario ahora se envía de forma nativa a guardar_producto.php
         
-        if (!supplierId || !productName || !productId || !expiryDate || quantity <= 0 || unitPrice <= 0) {
-            alert('Por favor, complete todos los campos correctamente.');
-            return;
-        }
-        
-        const supplier = suppliers.find(s => s.id === supplierId);
-        const subtotal = quantity * unitPrice;
-
-        const product = {
-            id: Date.now().toString(),
-            supplierId: supplierId,
-            supplierName: supplier.name,
-            productName: productName,
-            productId: productId,
-            expiryDate: expiryDate,
-            quantity: quantity,
-            unitPrice: unitPrice,
-            subtotal: subtotal
-        };
-
-        products.push(product);
-        localStorage.setItem('products', JSON.stringify(products));
-        alert('Producto agregado exitosamente.');
-        productForm.reset();
+        // El resto del código de validación del lado del cliente podría ser útil si el formulario se envía con fetch
+        // Pero para el envío nativo, la validación se puede hacer directamente en el PHP.
     });
 
     // Manejar el botón "Actualizar Sistema"
     updateProductBtn.addEventListener('click', () => {
-        alert('El sistema se ha actualizado. Los cambios están guardados en el navegador. Por favor, navegue a la página de "Inventario" para ver la lista completa.');
+        alert('El sistema se ha actualizado. Ahora los cambios se guardan directamente en la base de datos. Por favor, navegue a la página de "Inventario" para ver la lista completa.');
     });
 
     // Llamadas iniciales
     renderSuppliers();
 });
+
+// La función cargarInventario ya no es necesaria aquí, ya que el inventario se gestionará en inventario.js

@@ -48,149 +48,58 @@
     </div>
   </nav>
 
-  <div class="container-wrapper">
-    <form id="empleadoForm" method="POST" action="PHP/guardar_empleado.php" class="tableemp">
-        <h2>Registro de Empleado</h2>
-        <table class="table">
-            <tr>
-                <td><label for="empleadoNombre">Nombre Completo</label></td>
-                <td><input type="text" id="empleadoNombre" name="nombre" required minlength="5" maxlength="30"></td>
-            </tr>
-            <tr>
-                <td><label for="empleadoRut">RUT</label></td>
-                <td><input type="text" id="empleadoRut" name="rut" placeholder="12.345.678-9" required></td>
-            </tr>
-            <tr>
-                <td><label for="empleadoTipo">Tipo de Trabajo</label></td>
-                <td>
-                    <select id="empleadoTipo" name="tipo" required>
-                        <option value="Asistente de Gerencia">Asistente de Gerencia</option>
-                        <option value="Administrador">Administrador</option>
-                        <option value="Supervisor">Supervisor</option>
-                        <option value="Cajero">Cajero</option>
-                        <option value="Cocinero">Cocinero</option>
-                        <option value="Limpieza">Limpieza</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="empleadoPin">PIN de acceso</label></td>
-                <td>
-                    <input type="password" id="empleadoPin" name="pin" placeholder="PIN de 6 dígitos" required maxlength="6" pattern="[0-9]{6}" title="Debe contener exactamente 6 dígitos">
-                    <button type="button" id="togglePin" style="margin-left: 10px;">👁️</button>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><button type="submit">Guardar</button></td>
-            </tr>
-        </table>
-    </form>
-
-    <div class="empleados-list" style="margin-top: 30px;">
-        <h3>Empleados Registrados</h3>
-        <div id="listaEmpleados">
-            </div>
+  <main class="main-container">
+    <h2>Gestión de Empleados</h2>
+    
+    <div class="form-container">
+      <h3>Registrar Nuevo Empleado</h3>
+      <form id="empleadoForm" class="login-form">
+        <input type="text" name="nombre" placeholder="Nombre Completo" required>
+        <input type="text" name="rut" placeholder="RUT (sin puntos ni guion)" required>
+        <input type="number" name="pin" placeholder="PIN de 6 dígitos" minlength="6" maxlength="6" required>
+        <select name="tipo" required>
+          <option value="">Seleccione un Rol</option>
+          <option value="Asistente de Gerencia">Asistente de Gerencia</option>
+          <option value="Administrador">Administrador</option>
+          <option value="Supervisor">Supervisor</option>
+          <option value="Cajero">Cajero</option>
+          <option value="Cocinero">Cocinero</option>
+          <option value="Limpieza">Limpieza</option>
+        </select>
+        <button type="submit">Registrar Empleado</button>
+      </form>
     </div>
-</div>
+
+    <div class="form-container">
+      <h3>Editar Empleado Existente</h3>
+      <form id="empleadoEditForm" class="login-form">
+        <input type="text" name="id_personal" placeholder="ID de Empleado (Ej: ADM-001)" required>
+        <button type="button" id="buscarEmpleadoBtn">Buscar Empleado</button>
+      
+        <div id="editFields" style="display: none;">
+          <input type="text" name="nombre_edit" placeholder="Nombre Completo" required>
+          <input type="text" name="rut_edit" placeholder="RUT" required>
+          <select name="tipo_edit" required>
+            <option value="">Seleccione un Rol</option>
+            <option value="Asistente de Gerencia">Asistente de Gerencia</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Cajero">Cajero</option>
+            <option value="Cocinero">Cocinero</option>
+            <option value="Limpieza">Limpieza</option>
+          </select>
+          <button type="submit">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="list-container">
+      <h3>Empleados Registrados</h3>
+      <div id="listaEmpleados">
+        </div>
+    </div>
+  </main>
   
-  <footer>
-    &copy; 2024 Dulcería - Administración de Finanzas
-  </footer>
-
-  <script>
-    // Script para la navegación de la barra de radio buttons
-    const radios = document.querySelectorAll('input[name="radio"]');
-    radios.forEach(radio => {
-      radio.addEventListener('change', (event) => {
-        window.location.href = event.target.value;
-      });
-    });
-
-    // Toggle para mostrar/ocultar PIN
-    document.getElementById('togglePin').addEventListener('click', function() {
-      const pinInput = document.getElementById('empleadoPin');
-      if (pinInput.type === 'password') {
-        pinInput.type = 'text';
-        this.textContent = '🙈';
-      } else {
-        pinInput.type = 'password';
-        this.textContent = '👁️';
-      }
-    });
-
-    // Validar que solo se ingresen números en el PIN
-    document.getElementById('empleadoPin').addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9]/g, '');
-    });
-
-    // Manejar envío del formulario
-    document.getElementById('empleadoForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      const formData = new FormData(this);
-
-      try {
-        const response = await fetch('PHP/guardar_empleado.php', {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          alert(`Empleado registrado exitosamente.\nID: ${result.id_empleado}`);
-          this.reset();
-          cargarEmpleados(); // Recargar la lista
-        } else {
-          alert("Error: " + result.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert("Hubo un problema al conectar con el servidor.");
-      }
-    });
-
-    // Función para cargar empleados (opcional)
-    async function cargarEmpleados() {
-      try {
-        const response = await fetch('PHP/obtener_empleados.php');
-        const empleados = await response.json();
-        
-        const lista = document.getElementById('listaEmpleados');
-        lista.innerHTML = '';
-        
-        empleados.forEach(emp => {
-          const div = document.createElement('div');
-          div.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;';
-          div.innerHTML = `
-            <strong>${emp.nombre}</strong> - ${emp.id_personal}<br>
-            <small>RUT: ${emp.rut} | Rol: ${emp.rol}</small>
-          `;
-          lista.appendChild(div);
-        });
-      } catch (error) {
-        console.error('Error al cargar empleados:', error);
-      }
-    }
-
-    // Cargar empleados al iniciar la página
-    document.addEventListener('DOMContentLoaded', cargarEmpleados);
-    document.addEventListener('DOMContentLoaded', function() {
-        const nombreInput = document.getElementById('empleadoNombre');
-
-        nombreInput.addEventListener('input', function(event) {
-            // Obtiene el valor actual del campo
-            const valor = event.target.value;
-            // Define la expresión regular: solo permite letras (con o sin acentos), espacios, y la letra 'ñ'.
-            const regex = /[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g;
-            
-            // Reemplaza los caracteres no permitidos por una cadena vacía
-            const valorFiltrado = valor.replace(regex, '');
-
-            // Actualiza el valor del campo con la versión filtrada
-            event.target.value = valorFiltrado;
-        });
-    });
-  </script>
+  <script src="personal.js"></script>
 </body>
 </html>
