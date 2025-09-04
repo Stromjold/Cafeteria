@@ -38,6 +38,20 @@ CREATE TABLE `productos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `proveedores`
+--
+CREATE TABLE `proveedores` (
+  `id_proveedor` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(255) NOT NULL,
+  `rut` VARCHAR(15) NOT NULL,
+  `correo` VARCHAR(255) NOT NULL,
+  `telefono` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`id_proveedor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ventas`
 --
 CREATE TABLE `ventas` (
@@ -69,6 +83,9 @@ ALTER TABLE `empleados`
 
 ALTER TABLE `productos`
   MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  
+ALTER TABLE `proveedores`
+  MODIFY `id_proveedor` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
   
 ALTER TABLE `ventas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
