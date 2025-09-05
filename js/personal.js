@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (empleado.id_personal) {
             empleadoEditForm.querySelector('input[name="nombre_edit"]').value = empleado.nombre;
             empleadoEditForm.querySelector('input[name="rut_edit"]').value = empleado.rut;
+            empleadoEditForm.querySelector('input[name="correo_edit"]').value = empleado.correo;
             empleadoEditForm.querySelector('select[name="tipo_edit"]').value = empleado.rol;
             editFields.style.display = 'block';
           } else {
@@ -74,12 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const id_personal = empleadoEditForm.querySelector('input[name="id_personal"]').value;
       const nombre_edit = empleadoEditForm.querySelector('input[name="nombre_edit"]').value;
       const rut_edit = empleadoEditForm.querySelector('input[name="rut_edit"]').value;
+      const correo_edit = empleadoEditForm.querySelector('input[name="correo_edit"]').value;
       const tipo_edit = empleadoEditForm.querySelector('select[name="tipo_edit"]').value;
 
       const formData = new FormData();
       formData.append('id_personal', id_personal);
       formData.append('nombre', nombre_edit);
       formData.append('rut', rut_edit);
+      formData.append('correo', correo_edit);
       formData.append('rol', tipo_edit);
 
       try {
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
           div.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;';
           div.innerHTML = `
             <strong>${emp.nombre}</strong> - ${emp.id_personal}<br>
-            <small>RUT: ${emp.rut} | Rol: ${emp.rol}</small>
+            <small>RUT: ${emp.rut} | Correo: ${emp.correo} | Rol: ${emp.rol}</small>
           `;
           lista.appendChild(div);
         });
@@ -165,6 +168,7 @@ if (empleadoEditForm && buscarBtn) {
         if (empleado && empleado.id_personal) { // Verifica si 'empleado' no es nulo/vacío y tiene un id
           empleadoEditForm.querySelector('input[name="nombre_edit"]').value = empleado.nombre;
           empleadoEditForm.querySelector('input[name="rut_edit"]').value = empleado.rut;
+          empleadoEditForm.querySelector('input[name="correo_edit"]').value = empleado.correo;
           empleadoEditForm.querySelector('select[name="tipo_edit"]').value = empleado.rol;
           editFields.style.display = 'block';
         } else {
@@ -185,12 +189,14 @@ if (empleadoEditForm && buscarBtn) {
     const id_personal = empleadoEditForm.querySelector('input[name="id_personal"]').value;
     const nombre_edit = empleadoEditForm.querySelector('input[name="nombre_edit"]').value;
     const rut_edit = empleadoEditForm.querySelector('input[name="rut_edit"]').value;
+    const correo_edit = empleadoEditForm.querySelector('input[name="correo_edit"]').value;
     const tipo_edit = empleadoEditForm.querySelector('select[name="tipo_edit"]').value;
 
     const formData = new FormData();
     formData.append('id_personal', id_personal);
     formData.append('nombre', nombre_edit);
     formData.append('rut', rut_edit);
+    formData.append('correo', correo_edit);
     formData.append('rol', tipo_edit);
 
     try {
@@ -227,7 +233,7 @@ async function cargarEmpleados() {
         div.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;';
         div.innerHTML = `
           <strong>${emp.nombre}</strong> - ${emp.id_personal}<br>
-          <small>RUT: ${emp.rut} | Rol: ${emp.rol}</small>
+          <small>RUT: ${emp.rut} | Correo: ${emp.correo} | Rol: ${emp.rol}</small>
         `;
         lista.appendChild(div);
       });
@@ -245,4 +251,3 @@ async function cargarEmpleados() {
 cargarEmpleados();
 
 // ... (código existente para la función formatearRut)
-

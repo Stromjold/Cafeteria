@@ -10,7 +10,7 @@ if (!isset($_GET['id_personal'])) {
 $id_personal = $_GET['id_personal'];
 
 try {
-    $sql = "SELECT id_personal, nombre, rut, rol FROM empleados WHERE id_personal = ?";
+    $sql = "SELECT id_personal, nombre, rut, correo, rol FROM empleados WHERE id_personal = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $id_personal);
     $stmt->execute();

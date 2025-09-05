@@ -5,18 +5,19 @@ header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validar que todos los campos estén presentes
-    if (!isset($_POST['nombre'], $_POST['rut'], $_POST['tipo'], $_POST['pin'])) {
+    if (!isset($_POST['nombre'], $_POST['rut'], $_POST['correo'], $_POST['tipo'], $_POST['pin'])) {
         echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
         exit;
     }
 
     $nombre = trim($_POST['nombre']);
     $rut = trim($_POST['rut']);
+    $correo = trim($_POST['correo']);
     $rol = $_POST['tipo'];
     $pin = $_POST['pin'];
     
     // Validaciones básicas
-    if (empty($nombre) || empty($rut) || empty($rol) || empty($pin)) {
+    if (empty($nombre) || empty($rut) || empty($correo) || empty($rol) || empty($pin)) {
         echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
         exit;
     }
@@ -27,14 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
     
-    // Verificar si el RUT ya existe
-    $stmt_check = $conn->prepare("SELECT id_personal FROM empleados WHERE rut = ?");
-    $stmt_check->bind_param("s", $rut);
+    // Verificar si el RUT o correo ya existe
+    $stmt_check = $conn->prepare("SELECT id_personal FROM empleados WHERE rut = ? OR correo = ?");
+    $stmt_check->bind_param("ss", $rut, $correo);
     $stmt_check->execute();
     $result_check = $stmt_check->get_result();
     
     if ($result_check->num_rows > 0) {
-        echo json_encode(['success' => false, 'message' => 'Ya existe un empleado con este RUT.']);
+        echo json_encode(['success' => false, 'message' => 'Ya existe un empleado con este RUT o correo.']);
         exit;
     }
     
@@ -78,9 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } while ($result_id->num_rows > 0);
 
     // Insertar en la base de datos
-    $sql = "INSERT INTO empleados (id_personal, nombre, rut, pin, rol, fecha_registro) VALUES (?, ?, ?, ?, ?, NOW())";
+    $sql = "INSERT INTO empleados (id_personal, nombre, rut, correo, pin, rol, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $id_empleado, $nombre, $rut, $pin_hasheado, $rol);
+    $stmt->bind_param("ssssss", $id_empleado, $nombre, $rut, $correo, $pin_hasheado, $rol);
 
     if ($stmt->execute()) {
         echo json_encode([

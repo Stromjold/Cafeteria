@@ -14,6 +14,7 @@ CREATE TABLE `empleados` (
   `id_personal` varchar(50) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `rut` varchar(15) NOT NULL,
+  `correo` varchar(255) NOT NULL,
   `pin` varchar(255) NOT NULL,
   `rol` varchar(50) NOT NULL,
   `fecha_registro` datetime NOT NULL
@@ -69,7 +70,8 @@ CREATE TABLE `ventas` (
 ALTER TABLE `empleados`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id_personal` (`id_personal`),
-  ADD UNIQUE KEY `rut` (`rut`);
+  ADD UNIQUE KEY `rut` (`rut`),
+  ADD UNIQUE KEY `correo` (`correo`);
 
 ALTER TABLE `ventas`
   ADD PRIMARY KEY (`id`),

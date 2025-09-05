@@ -56,6 +56,7 @@
       <form id="empleadoForm" class="login-form">
         <input type="text" name="nombre" placeholder="Nombre Completo" required>
         <input type="text" name="rut" id="rutInput" placeholder="RUT" onkeyup="formatearRut(this)" maxlength="12" required>
+        <input type="email" name="correo" placeholder="Correo Electrónico" required>
         <input type="text" name="pin" placeholder="PIN de 6 dígitos"  maxlength="6" required>
         <select name="tipo" required>
           <option value="">Seleccione un Rol</option>
@@ -79,6 +80,7 @@
         <div id="editFields" style="display: none;">
           <input type="text" name="nombre_edit" placeholder="Nombre Completo" required>
           <input type="text" name="rut_edit" placeholder="RUT" required>
+          <input type="email" name="correo_edit" placeholder="Correo Electrónico" required>
           <select name="tipo_edit" required>
             <option value="">Seleccione un Rol</option>
             <option value="Asistente de Gerencia">Asistente de Gerencia</option>

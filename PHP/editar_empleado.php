@@ -3,7 +3,7 @@ require 'conexion.php';
 header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_POST['id_personal'], $_POST['nombre'], $_POST['rut'], $_POST['rol'])) {
+    if (!isset($_POST['id_personal'], $_POST['nombre'], $_POST['rut'], $_POST['correo'], $_POST['rol'])) {
         echo json_encode(['success' => false, 'message' => 'Faltan campos obligatorios.']);
         exit;
     }
@@ -11,12 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_personal = $_POST['id_personal'];
     $nombre = trim($_POST['nombre']);
     $rut = trim($_POST['rut']);
+    $correo = trim($_POST['correo']);
     $rol = $_POST['rol'];
 
     try {
-        $sql = "UPDATE empleados SET nombre = ?, rut = ?, rol = ? WHERE id_personal = ?";
+        $sql = "UPDATE empleados SET nombre = ?, rut = ?, correo = ?, rol = ? WHERE id_personal = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $nombre, $rut, $rol, $id_personal);
+        $stmt->bind_param("sssss", $nombre, $rut, $correo, $rol, $id_personal);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true, 'message' => 'Empleado actualizado exitosamente.']);

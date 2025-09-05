@@ -3,7 +3,7 @@ require 'conexion.php';
 header('Content-Type: application/json');
 
 try {
-    $sql = "SELECT id_personal, nombre, rut, rol FROM empleados";
+    $sql = "SELECT id_personal, nombre, rut, correo, rol FROM empleados";
     $result = $conn->query($sql);
     
     $empleados = [];
