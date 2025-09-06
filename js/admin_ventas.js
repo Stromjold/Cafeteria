@@ -192,4 +192,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carga inicial
     loadSuppliers();
     loadProducts();
+
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Recolectar los datos del formulario
+        const productName = document.getElementById('productName').value;
+        const productId = document.getElementById('productId').value;
+        const selectedSupplier = document.getElementById('selectedSupplier').value;
+        const unitPrice = document.getElementById('unitPrice').value;
+        const productImage = document.getElementById('productImage').value;
+
+        // Crear un objeto producto
+        const newProduct = {
+            id_producto: productId,
+            nombre: productName,
+            proveedor: selectedSupplier,
+            precio_unitario: parseFloat(unitPrice),
+            enlace_imagen: productImage
+        };
+
+        // Obtener los productos existentes del localStorage
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+
+        // Agregar el nuevo producto al array
+        productos.push(newProduct);
+
+        // Guardar el array actualizado en localStorage
+        localStorage.setItem('productos', JSON.stringify(productos));
+
+        // Limpiar el formulario
+        this.reset();
+
+        // Opcional: Mostrar un mensaje de éxito
+        alert('Producto agregado con éxito!');
+
+        // Recargar los productos en Principal.js
+        window.dispatchEvent(new Event('productosActualizados'));
+    });
 });
