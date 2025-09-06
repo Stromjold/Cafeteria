@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group">
                         <label for="productId">Código</label>
-                        <input type="text" id="productId" name="codigo" required>
+                        <input type="text" id="productId" name="codigo" maxlength="14" required>
                     </div>
                     <div class="form-group">
                         <label for="selectedSupplier">Proveedor</label>
@@ -83,6 +83,10 @@
                         <label for="unitPrice">Precio Unitario</label>
                         <input type="text" id="unitPrice" name="precio_unitario" placeholder="0.00" required>
                     </div>
+                    <div class="form-group">
+                        <label for="productImage">Enlace de Imagen</label>
+                        <input type="url" id="productImage" name="enlace_imagen" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
                     <div class="actions">
                         <button type="submit" class="btn btn-secondary">Agregar Producto</button>
                         <button type="button" class="btn btn-danger" onclick="document.getElementById('productForm').reset();">Limpiar Formulario</button>
@@ -95,24 +99,22 @@
                 <h3>Agregar Nuevo Proveedor</h3>
                 <form id="addSupplierForm">
                     <div class="form-group">
-                        <label for="newSupplierName">Nombre del Proveedor</label>
-                        <input type="text" id="newSupplierName" name="nombre_proveedor" required>
+                        <label for="newSupplierName">Nombre</label>
+                        <input type="text" id="newSupplierName" name="nombre" required>
                     </div>
                     <div class="form-group">
                         <label for="newSupplierRut">RUT</label>
-                        <input type="text" id="newSupplierRut" name="rut_proveedor" required>
+                        <input type="text" id="newSupplierRut" name="rut" required>
                     </div>
                     <div class="form-group">
                         <label for="newSupplierEmail">Correo</label>
-                        <input type="email" id="newSupplierEmail" name="correo_proveedor" required>
+                        <input type="email" id="newSupplierEmail" name="correo" required>
                     </div>
                     <div class="form-group">
                         <label for="newSupplierPhone">Teléfono</label>
-                        <input type="tel" id="newSupplierPhone" name="telefono_proveedor" required>
+                        <input type="tel" id="newSupplierPhone" name="telefono" required>
                     </div>
-                    <div class="actions">
-                        <button type="submit" id="addSupplierBtn" class="btn btn-secondary">Agregar Proveedor</button>
-                    </div>
+                    <button type="submit" class="btn btn-secondary">Agregar Proveedor</button>
                 </form>
 
                 <div class="edit-supplier-section">

@@ -33,6 +33,7 @@ CREATE TABLE `productos` (
   `fecha_vencimiento` DATE NOT NULL,
   `cantidad` INT(11) NOT NULL,
   `precio_unitario` DECIMAL(10,2) NOT NULL,
+  `enlace_imagen` VARCHAR(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,7 +43,7 @@ CREATE TABLE `productos` (
 -- Estructura de tabla para la tabla `proveedores`
 --
 CREATE TABLE `proveedores` (
-  `id_proveedor` INT NOT NULL AUTO_INCREMENT,
+  `id_proveedor` INT(11) NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(255) NOT NULL,
   `rut` VARCHAR(15) NOT NULL,
   `correo` VARCHAR(255) NOT NULL,
@@ -62,7 +63,6 @@ CREATE TABLE `ventas` (
   `total_venta` DECIMAL(10,2) NOT NULL,
   `detalle_venta` TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 --
 -- Índices para tablas volcadas
@@ -84,17 +84,11 @@ ALTER TABLE `empleados`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ALTER TABLE `productos`
-  MODIFY `id` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-  
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedor` INT NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-  
+  MODIFY `id_proveedor` INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
 ALTER TABLE `ventas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
---
--- Restricciones para tablas volcadas
---
-ALTER TABLE `ventas`
-  ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleados` (`id_personal`);
-COMMIT;

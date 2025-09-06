@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- DOM Elements ---
+    // --- Elementos del DOM ---
     const addSupplierBtn = document.getElementById('addSupplierBtn');
     const addSupplierForm = document.getElementById('addSupplierForm');
     const newSupplierName = document.getElementById('newSupplierName');
@@ -18,105 +18,108 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateSupplierBtn = document.getElementById('updateSupplierBtn');
     const unitPriceInput = document.getElementById('unitPrice');
     const navRadios = document.querySelectorAll('input[name="radio"]');
+    
 
+    // --- Funciones de utilidad ---
 
-    // --- Utility Functions ---
     /**
-     * @description Fetches suppliers from the server and populates the select dropdowns.
+     * @description Formatea el precio unitario mientras se escribe.
+     */
+    unitPriceInput.addEventListener('input', (e) => {
+        const input = e.target;
+        let value = input.value.replace(/\./g, '');
+        if (value.length > 3) {
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+        input.value = value;
+    });
+
+    /**
+     * @description Obtiene los proveedores del servidor y llena los select.
      */
     const loadSuppliers = async () => {
         try {
             const response = await fetch('PHP/obtener_proveedores.php');
-            if (!response.ok) throw new Error('Network response was not ok');
-            const proveedores = await response.json();
+            const suppliers = await response.json();
 
-            // Clear and populate both selects
-            selectedSupplier.innerHTML = '<option value="">Seleccione un proveedor</option>';
-            editSupplierSelect.innerHTML = '<option value="">Seleccione un proveedor para editar</option>';
-            
-            proveedores.forEach(proveedor => {
-                const option = document.createElement('option');
-                option.value = proveedor.nombre;
-                option.textContent = proveedor.nombre;
-                selectedSupplier.appendChild(option.cloneNode(true));
-                editSupplierSelect.appendChild(option);
+            const supplierSelects = [selectedSupplier, editSupplierSelect];
+            supplierSelects.forEach(select => {
+                select.innerHTML = '';
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Selecciona un proveedor';
+                select.appendChild(defaultOption);
+                suppliers.forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.nombre;
+                    option.textContent = supplier.nombre;
+                    select.appendChild(option);
+                });
             });
         } catch (error) {
-            console.error('Error al cargar los proveedores:', error);
-            alert('Error al cargar los proveedores. Verifique su conexión y los archivos PHP.');
+            console.error('Error al cargar proveedores:', error);
+            alert('Error al cargar la lista de proveedores. Por favor, verifique la conexión.');
         }
     };
 
     /**
-     * @description Checks for duplicate RUT or phone number on the server.
-     * @param {string} rut
-     * @param {string} telefono
-     * @returns {Promise<Object>}
+     * @description Obtiene los productos y llena la tabla de inventario.
      */
-    const checkDuplicity = async (rut, telefono) => {
-        const formData = new FormData();
-        formData.append('rut', rut);
-        formData.append('telefono', telefono);
+    const loadProducts = async () => {
+        const inventoryTableBody = document.getElementById('inventoryTableBody');
         try {
-            const response = await fetch('PHP/verificar_duplicidad.php', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
-            return result;
+            const response = await fetch('PHP/obtener_inventario.php');
+            const products = await response.json();
+            inventoryTableBody.innerHTML = '';
+            if (products.length > 0) {
+                products.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.nombre}</td>
+                        <td>${product.proveedor}</td>
+                        <td>${product.id_producto}</td>
+                        <td>${product.fecha_vencimiento}</td>
+                        <td>${product.cantidad}</td>
+                        <td>$${parseFloat(product.precio_unitario).toFixed(2)}</td>
+                    `;
+                    inventoryTableBody.appendChild(row);
+                });
+            } else {
+                inventoryTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay productos en el inventario.</td></tr>';
+            }
         } catch (error) {
-            console.error('Error al verificar duplicidad:', error);
-            return { success: false, message: 'Error al conectar con el servidor para verificar duplicidad.' };
+            console.error('Error al cargar productos:', error);
+            alert('Error al cargar el inventario. Verifique la conexión y los archivos PHP.');
         }
     };
 
 
-    // --- Input Formatting Event Listeners ---
-    unitPriceInput.addEventListener('input', (e) => {
-        const input = e.target.value.replace(/[^0-9]/g, '');
-        const formatted = input.split('').reverse().join('')
-                               .replace(/(\d{3})(?=\d)/g, '$1.')
-                               .split('').reverse().join('');
-        e.target.value = formatted;
-    });
+    // --- Listeners de Eventos de Formularios ---
 
-    newSupplierPhone.addEventListener('input', (e) => {
-        const cleaned = e.target.value.replace(/\D/g, '');
-        let formatted = '';
-        if (cleaned.length > 0) formatted += '+' + cleaned.substring(0, 2);
-        if (cleaned.length > 2) formatted += ' ' + cleaned.substring(2, 3);
-        if (cleaned.length > 3) formatted += ' ' + cleaned.substring(3, 7);
-        if (cleaned.length > 7) formatted += ' ' + cleaned.substring(7, 11);
-        e.target.value = formatted;
-    });
-
-    newSupplierRut.addEventListener('input', (e) => {
-        const input = e.target.value.replace(/[^0-9kK]/g, '');
-        let formattedRut = '';
-        const rutLength = input.length;
-        if (rutLength > 1) {
-            const dv = input.charAt(rutLength - 1);
-            let rutBody = input.substring(0, rutLength - 1);
-            rutBody = rutBody.split('').reverse().join('')
-                             .replace(/(\d{3})(?=\d)/g, '$1.')
-                             .split('').reverse().join('');
-            formattedRut = `${rutBody}-${dv}`;
-        } else {
-            formattedRut = input;
-        }
-        e.target.value = formattedRut.toUpperCase();
-    });
-
-    // --- Form Submission Event Listeners ---
+    // Listener para el formulario de productos
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const formData = new FormData(productForm);
+        
+        // Nueva validación para el código de producto (código de barra)
+        const productId = formData.get('codigo');
+        if (productId && productId.length > 14) {
+            alert('Error: El código de producto no puede exceder los 14 caracteres.');
+            return;
+        }
+
         try {
-            const response = await fetch('PHP/guardar_producto.php', { method: 'POST', body: formData });
+            const response = await fetch('PHP/guardar_producto.php', {
+                method: 'POST',
+                body: formData
+            });
             const result = await response.json();
+            
             if (result.success) {
                 alert('Producto guardado exitosamente.');
                 productForm.reset();
+                loadProducts(); // Vuelve a cargar la tabla de inventario
             } else {
                 alert('Error: ' + result.message);
             }
@@ -126,81 +129,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Listener para el formulario de agregar proveedor
     addSupplierForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nombre = newSupplierName.value.trim();
-        const rut = newSupplierRut.value.trim();
-        const correo = newSupplierEmail.value.trim();
-        const telefono = newSupplierPhone.value.trim();
-
-        if (!nombre || !rut || !correo || !telefono) {
-            alert('Por favor, complete todos los campos para agregar un proveedor.');
-            return;
-        }
-
-        const duplicityCheck = await checkDuplicity(rut, telefono);
-        if (!duplicityCheck.success) {
-            alert('Error: ' + duplicityCheck.message);
-            return;
-        }
-        if (duplicityCheck.rutExists) {
-            alert('Error: El RUT ingresado ya existe.');
-            return;
-        }
-        if (duplicityCheck.telefonoExists) {
-            alert('Error: El teléfono ingresado ya existe.');
-            return;
-        }
-
-        const formData = new FormData(addSupplierForm);
-        try {
-            const response = await fetch('PHP/guardar_proveedor.php', { method: 'POST', body: formData });
-            const result = await response.json();
-            if (result.success) {
-                alert('Proveedor guardado exitosamente.');
-                addSupplierForm.reset();
-                loadSuppliers(); // Reload suppliers to update the select menus
-            } else {
-                alert('Error: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Error al enviar los datos del proveedor:', error);
-            alert('Error al conectar con el servidor.');
-        }
-    });
-    
-    updateSupplierBtn.addEventListener('click', async () => {
-        const originalName = editSupplierSelect.value;
-        const updatedData = {
-            originalName: originalName,
-            nombre: editSupplierName.value.trim(),
-            rut: editSupplierRut.value.trim(),
-            correo: editSupplierEmail.value.trim(),
-            telefono: editSupplierPhone.value.trim()
-        };
         
+        const formData = new FormData(addSupplierForm);
+
         try {
-            const response = await fetch('PHP/actualizar_proveedor.php', {
+            const response = await fetch('PHP/guardar_proveedor.php', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedData)
+                body: formData
             });
             const result = await response.json();
             
             if (result.success) {
-                alert('Proveedor actualizado exitosamente.');
-                loadSuppliers();
-                editFormContainer.style.display = 'none';
+                alert(result.message);
+                addSupplierForm.reset();
+                loadSuppliers(); // Vuelve a cargar la lista de proveedores
             } else {
                 alert('Error: ' + result.message);
             }
         } catch (error) {
-            console.error('Error al actualizar el proveedor:', error);
+            console.error('Error al guardar el proveedor:', error);
             alert('Error al conectar con el servidor.');
         }
     });
 
-    // --- Dropdown Change Listeners ---
+    // --- Listeners de cambio de Dropdown ---
     editSupplierSelect.addEventListener('change', async (e) => {
         const supplierName = e.target.value;
         if (supplierName) {
@@ -225,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Navigation via radio buttons ---
+    // --- Navegación a través de botones de radio ---
     navRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
             if (e.target.checked) {
@@ -234,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initial load
+    // Carga inicial
     loadSuppliers();
+    loadProducts();
 });

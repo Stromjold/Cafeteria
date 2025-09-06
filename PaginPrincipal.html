@@ -3,134 +3,570 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capuchin Mountain - Cafetería</title>
+    <title>Carrito de Compras</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Estilos/PaginPrincipal.css">
+    <style>
+        .cart-item-enter {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .cart-item-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
-<body>
-    <div class="min-h-screen flex flex-col">
-        <header class="bg-[#5a3e2b] text-white shadow-lg">
-            <div class="container mx-auto px-4 py-6 flex justify-between items-center">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 8V4a2 2 0 00-2-2H8a2 2 0 00-2 2v4m8 0h4m-4 0a4 4 0 01-4 4v4m0-4h-4" />
-                    </svg>
-                    <span class="text-3xl font-bold">Capuchin Mountain</span>
+<body class="bg-amber-50 min-h-screen">
+    <!-- Header con carrito -->
+    <header class="bg-amber-100 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-amber-900">Mi Tienda</h1>
+            <div class="flex items-center space-x-4">
+                <button id="cart-toggle" class="relative bg-amber-800 text-white px-4 py-2 rounded-lg hover:bg-amber-900 transition-colors">
+                    🛒 Carrito
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal del carrito -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-amber-50 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-amber-900">Tu Carrito</h2>
+                        <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-6">
-                    <div class="relative">
-                        <button id="cart-icon" class="relative hover:text-[#e6d7c3] transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l2-8H7m0 0a2 2 0 100 4h10a2 2 0 100-4h-10zm2 12a2 2 0 100 4 2 2 0 000-4zm12 0a2 2 0 100 4 2 2 0 000-4z" />
-                            </svg>
-                            <span id="cart-count" class="absolute -top-1 -right-1 bg-[#7c5a2c] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                <div id="cart-items" class="p-6 max-h-96 overflow-y-auto">
+                    <p class="text-center text-gray-500">Tu carrito está vacío</p>
+                </div>
+                <div class="p-6 border-t bg-amber-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold">Total:</span>
+                        <span id="cart-total" class="text-2xl font-bold text-amber-900">$0</span>
+                    </div>
+                    <button id="checkout-btn" class="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold hover:bg-amber-900 transition-colors disabled:bg-gray-400" disabled>
+                        Proceder al Pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de opciones de pago -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-amber-50 rounded-lg max-w-md w-full">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-amber-900">Método de Pago</h2>
+                        <button id="close-payment" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <button id="pay-cash" class="w-full bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+                            <span>💵</span>
+                            <span>Pagar en Efectivo</span>
+                        </button>
+                        <button id="pay-debit" class="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
+                            <span>💳</span>
+                            <span>Pagar con Débito</span>
                         </button>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </div>
 
-        <main class="flex-grow bg-[#e6d7c3] py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-5xl font-bold text-[#5a3e2b] mb-4">Nuestro Menú</h2>
-                    <p class="text-xl text-[#7c5a2c]">Disfruta de la mejor selección de cafés y repostería artesanal</p>
+    <!-- Modal de pago con débito -->
+    <div id="debit-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-amber-50 rounded-lg max-w-md w-full">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-amber-900">Pago con Débito</h2>
+                        <button id="close-debit" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
                 </div>
-
-                <div class="flex justify-center space-x-4 mb-8">
-                    <button class="category-btn bg-[#7c5a2c] text-white px-6 py-2 rounded-full font-bold transition-colors active" data-category="all">Todos</button>
-                    <button class="category-btn bg-[#e6d7c3] text-[#5a3e2b] px-6 py-2 rounded-full font-bold transition-colors" data-category="cafes">Cafés</button>
-                    <button class="category-btn bg-[#e6d7c3] text-[#5a3e2b] px-6 py-2 rounded-full font-bold transition-colors" data-category="pasteles">Pasteles</button>
-                    <button class="category-btn bg-[#e6d7c3] text-[#5a3e2b] px-6 py-2 rounded-full font-bold transition-colors" data-category="jugos">Jugos</button>
-                </div>
-
-                <div id="menu-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    </div>
-            </div>
-        </main>
-
-        <div id="cart-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div class="bg-white rounded-lg shadow-xl p-6 w-96 relative">
-                <button id="close-cart" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <h3 class="text-2xl font-bold text-[#5a3e2b] mb-4">Tu Carrito</h3>
-                <div id="cart-items" class="space-y-4 max-h-64 overflow-y-auto pr-2">
-                    </div>
-                <p id="empty-cart-message" class="text-center text-gray-500 mt-4">El carrito está vacío.</p>
-                <div id="cart-content" class="mt-4 pt-4 border-t border-gray-200 hidden">
-                    <div class="flex justify-between items-center text-lg font-bold text-[#5a3e2b]">
-                        <span>Total:</span>
-                        <span id="cart-total">$0</span>
-                    </div>
-                    <form id="invoice-form" class="mt-4 space-y-2">
-                        <select id="payment-method" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                            <option value="">Seleccione método de pago</option>
-                            <option value="debito">Débito</option>
-                            <option value="efectivo">Efectivo</option>
-                        </select>
-                        
-                        <div id="debito-fields" class="space-y-2 hidden">
-                            <input type="text" id="customer-name" placeholder="Nombre completo" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                            <input type="text" id="customer-rut" placeholder="RUT (ej. 12.345.678-9)" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                <div class="p-6">
+                    <form id="debit-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">RUT</label>
+                            <input type="text" id="rut-input" placeholder="12.345.678-9" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800" required>
                         </div>
-
-                        <div id="efectivo-fields" class="mt-4 hidden">
-                            <div class="mb-4">
-                                <label for="cash-amount-paid" class="block text-sm font-medium text-gray-700">Monto entregado en efectivo</label>
-                                <input type="text" id="cash-amount-paid" placeholder="Ej: 10.000" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+                            <input type="text" id="name-input" placeholder="Juan Pérez" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-800" required>
                         </div>
-                        
-                        <button type="submit" class="w-full bg-[#7c5a2c] text-white py-2 rounded-md font-bold hover:bg-[#5a3e2b] transition-colors">
-                            Proceder al Pago
+                        <div class="flex justify-between items-center pt-4">
+                            <span class="text-lg font-bold">Total a pagar:</span>
+                            <span id="debit-total" class="text-xl font-bold text-amber-900">$0</span>
+                        </div>
+                        <button type="submit" class="w-full bg-amber-800 text-white py-3 rounded-lg font-semibold hover:bg-amber-900 transition-colors">
+                            Confirmar Pago
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-        
-        <button id="assistant-toggle-button" class="fixed bottom-6 right-6 bg-[#5a3e2b] text-white p-4 rounded-full shadow-lg hover:bg-[#7c5a2c] transition-colors z-40">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        </button>
-        
-        <div id="assistant-container" class="fixed bottom-24 right-6 w-80 bg-white rounded-lg shadow-xl overflow-hidden hidden z-40">
-            <div class="bg-[#5a3e2b] text-white p-3 flex justify-between items-center">
-                <h4 class="font-bold">Asistente AI</h4>
-                <button id="close-assistant" class="text-white hover:text-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div id="chat-messages" class="p-3 h-64 overflow-y-auto space-y-4">
-                <div class="chat-message assistant">¡Hola! ¿En qué puedo ayudarte hoy?</div>
-            </div>
-            <div id="typing-indicator" class="p-3 text-sm text-gray-500 hidden">Escribiendo...</div>
-            <div class="p-3 border-t border-gray-200 flex">
-                <input type="text" id="user-input" class="w-full p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#7c5a2c]" placeholder="Escribe tu mensaje...">
-                <button id="send-message" class="bg-[#5a3e2b] text-white p-2 rounded-r-md hover:bg-[#7c5a2c]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                </button>
+    </div>
+
+    <!-- Modal de boleta -->
+    <div id="receipt-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-amber-50 rounded-lg max-w-md w-full">
+                <div class="p-6 border-b">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-[#5a3e2b]">Boleta de Compra</h2>
+                        <button id="close-receipt" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                </div>
+                <div id="receipt-content" class="p-6">
+                    <!-- El contenido de la boleta se generará aquí -->
+                </div>
+                <div class="p-6 border-t bg-amber-100">
+                    <button id="print-receipt" class="w-full bg-[#7c5d4b] text-white py-3 rounded-lg font-semibold hover:bg-[#5a3e2b] transition-colors">
+                        Imprimir Boleta
+                    </button>
+                </div>
             </div>
         </div>
-
-        <footer class="bg-[#5a3e2b] text-white py-6">
-            <div class="container mx-auto px-4 text-center">
-                <p>© 2024 Capuchin Mountain - Café & Desayunos</p>
-            </div>
-        </footer>
     </div>
-    
-    
-    <script src="js/Principal.js"></script>
-</body>
+
+    <!-- Contenido principal -->
+    <main class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-center text-[#5a3e2b] mb-8">Nuestros Productos</h2>
+        <div id="productos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Los productos se cargarán aquí -->
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productosContainer = document.getElementById('productos-container');
+            const cartCount = document.getElementById('cart-count');
+            const cartModal = document.getElementById('cart-modal');
+            const cartToggle = document.getElementById('cart-toggle');
+            const closeCart = document.getElementById('close-cart');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+            // Productos de muestra (simulando la respuesta del PHP)
+            const productosData = {
+                success: true,
+                productos: [
+                    {
+                        id_producto: 1,
+                        nombre: "Café Premium Colombiano",
+                        proveedor: "Café del Valle",
+                        precio_unitario: 15990,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23D2B48C'/%3E%3Ccircle cx='150' cy='100' r='60' fill='%236F4E37'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3ECafé Premium%3C/text%3E%3C/svg%3E"
+                    },
+                    {
+                        id_producto: 2,
+                        nombre: "Chocolate Artesanal",
+                        proveedor: "Dulces Tradición",
+                        precio_unitario: 8990,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23F5DEB3'/%3E%3Crect x='75' y='50' width='150' height='100' fill='%23654321' rx='10'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3EChocolate%3C/text%3E%3C/svg%3E"
+                    },
+                    {
+                        id_producto: 3,
+                        nombre: "Té Verde Orgánico",
+                        proveedor: "Hierbas Naturales",
+                        precio_unitario: 12500,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23E6F3E6'/%3E%3Ccircle cx='150' cy='80' r='40' fill='%23228B22'/%3E%3Cpath d='M120 80 Q150 50 180 80' stroke='%23228B22' stroke-width='3' fill='none'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3ETé Verde%3C/text%3E%3C/svg%3E"
+                    },
+                    {
+                        id_producto: 4,
+                        nombre: "Miel de Abeja Pura",
+                        proveedor: "Apiarios del Sur",
+                        precio_unitario: 18900,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23FFF8DC'/%3E%3Cellipse cx='150' cy='90' rx='50' ry='60' fill='%23FFD700'/%3E%3Cpath d='M130 70 Q150 50 170 70' stroke='%23FFA500' stroke-width='2' fill='none'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3EMiel Pura%3C/text%3E%3C/svg%3E"
+                    },
+                    {
+                        id_producto: 5,
+                        nombre: "Galletas Integrales",
+                        proveedor: "Panadería Artesanal",
+                        precio_unitario: 6990,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23F5F5DC'/%3E%3Ccircle cx='120' cy='80' r='25' fill='%23DEB887'/%3E%3Ccircle cx='180' cy='80' r='25' fill='%23DEB887'/%3E%3Ccircle cx='150' cy='120' r='25' fill='%23DEB887'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3EGalletas%3C/text%3E%3C/svg%3E"
+                    },
+                    {
+                        id_producto: 6,
+                        nombre: "Aceite de Oliva Extra",
+                        proveedor: "Olivares Premium",
+                        precio_unitario: 24990,
+                        enlace_imagen: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23F0F8FF'/%3E%3Crect x='125' y='40' width='50' height='100' fill='%23556B2F' rx='25'/%3E%3Ccircle cx='150' cy='50' r='8' fill='%23FFD700'/%3E%3Ctext x='150' y='170' text-anchor='middle' font-family='Arial' font-size='16' fill='%23333'%3EAceite Oliva%3C/text%3E%3C/svg%3E"
+                    }
+                ]
+            };
+
+            const updateCartCount = () => {
+                const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+                cartCount.textContent = totalItems;
+                checkoutBtn.disabled = totalItems === 0;
+            };
+
+            const formatPrice = (price) => {
+                return new Intl.NumberFormat('es-CL').format(price);
+            };
+
+            const addToCart = (product) => {
+                if (cart[product.id]) {
+                    cart[product.id].quantity++;
+                } else {
+                    cart[product.id] = { ...product, quantity: 1 };
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartDisplay();
+                
+                // Mostrar notificación
+                showNotification(`${product.nombre} se ha añadido al carrito.`);
+            };
+
+            const removeFromCart = (productId) => {
+                if (cart[productId]) {
+                    if (cart[productId].quantity > 1) {
+                        cart[productId].quantity--;
+                    } else {
+                        delete cart[productId];
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartCount();
+                    updateCartDisplay();
+                }
+            };
+
+            const updateCartDisplay = () => {
+                const cartItemsArray = Object.values(cart);
+                
+                if (cartItemsArray.length === 0) {
+                    cartItems.innerHTML = '<p class="text-center text-gray-500">Tu carrito está vacío</p>';
+                    cartTotal.textContent = '$0';
+                    return;
+                }
+
+                let total = 0;
+                cartItems.innerHTML = cartItemsArray.map(item => {
+                    const itemTotal = item.precio * item.quantity;
+                    total += itemTotal;
+                    
+                    return `
+                        <div class="flex items-center justify-between p-4 border-b">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-[#5a3e2b]">${item.nombre}</h4>
+                                <p class="text-gray-600">$${formatPrice(item.precio)} c/u</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <button onclick="removeFromCart(${item.id})" class="bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-colors">-</button>
+                                <span class="font-semibold min-w-[2rem] text-center">${item.quantity}</span>
+                                <button onclick="addToCart({id: ${item.id}, nombre: '${item.nombre}', precio: ${item.precio}})" class="bg-green-500 text-white w-8 h-8 rounded-full hover:bg-green-600 transition-colors">+</button>
+                            </div>
+                            <div class="ml-4 font-bold text-[#5a3e2b]">
+                                $${formatPrice(itemTotal)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                cartTotal.textContent = `$${formatPrice(total)}`;
+            };
+
+            const showNotification = (message) => {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.classList.remove('translate-x-full');
+                }, 100);
+
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            };
+
+            const cargarProductos = () => {
+                const data = productosData;
+
+                if (data.success && data.productos.length > 0) {
+                    data.productos.forEach(producto => {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105';
+                        productCard.innerHTML = `
+                            <img src="${producto.enlace_imagen}" alt="${producto.nombre}" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-[#5a3e2b] mb-2">${producto.nombre}</h3>
+                                <p class="text-gray-600 mb-4">${producto.proveedor}</p>
+                                <p class="text-2xl font-bold text-gray-800">$${formatPrice(producto.precio_unitario)}</p>
+                                <button class="mt-4 w-full bg-[#7c5d4b] text-white py-2 rounded-lg font-semibold hover:bg-[#5a3e2b] transition-colors" data-product-id="${producto.id_producto}">Añadir al Carrito</button>
+                            </div>
+                        `;
+                        productosContainer.appendChild(productCard);
+
+                        const addButton = productCard.querySelector('button');
+                        addButton.addEventListener('click', () => {
+                            const productToAdd = {
+                                id: producto.id_producto,
+                                nombre: producto.nombre,
+                                precio: parseFloat(producto.precio_unitario)
+                            };
+                            addToCart(productToAdd);
+                        });
+                    });
+                } else {
+                    productosContainer.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles en este momento.</p>';
+                }
+            };
+
+            // Event listeners para el modal del carrito
+            cartToggle.addEventListener('click', () => {
+                cartModal.classList.remove('hidden');
+                updateCartDisplay();
+            });
+
+            closeCart.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+            });
+
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.classList.add('hidden');
+                }
+            });
+
+            // Variables para los nuevos modales
+            const paymentModal = document.getElementById('payment-modal');
+            const debitModal = document.getElementById('debit-modal');
+            const receiptModal = document.getElementById('receipt-modal');
+            const closePayment = document.getElementById('close-payment');
+            const closeDebit = document.getElementById('close-debit');
+            const closeReceipt = document.getElementById('close-receipt');
+            const payCash = document.getElementById('pay-cash');
+            const payDebit = document.getElementById('pay-debit');
+            const debitForm = document.getElementById('debit-form');
+            const debitTotal = document.getElementById('debit-total');
+            const receiptContent = document.getElementById('receipt-content');
+            const printReceipt = document.getElementById('print-receipt');
+
+            let currentPurchase = null;
+
+            const generateReceiptNumber = () => {
+                return Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            };
+
+            const getCurrentDateTime = () => {
+                const now = new Date();
+                return {
+                    date: now.toLocaleDateString('es-CL'),
+                    time: now.toLocaleTimeString('es-CL')
+                };
+            };
+
+            const generateReceipt = (paymentMethod, customerData = null) => {
+                const cartItemsArray = Object.values(cart);
+                const total = cartItemsArray.reduce((sum, item) => sum + (item.precio * item.quantity), 0);
+                const { date, time } = getCurrentDateTime();
+                const receiptNumber = generateReceiptNumber();
+
+                let customerInfo = '';
+                if (paymentMethod === 'debito' && customerData) {
+                    customerInfo = `
+                        <div class="mb-4 p-3 bg-gray-50 rounded">
+                            <p><strong>Cliente:</strong> ${customerData.name}</p>
+                            <p><strong>RUT:</strong> ${customerData.rut}</p>
+                        </div>
+                    `;
+                }
+
+                const itemsList = cartItemsArray.map(item => `
+                    <div class="flex justify-between py-1">
+                        <span>${item.nombre} x${item.quantity}</span>
+                        <span>$${formatPrice(item.precio * item.quantity)}</span>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="text-center mb-4">
+                        <h3 class="text-xl font-bold text-[#5a3e2b]">MI TIENDA</h3>
+                        <p class="text-sm text-gray-600">Boleta Electrónica</p>
+                        <p class="text-sm text-gray-600">N° ${receiptNumber}</p>
+                    </div>
+                    
+                    <div class="mb-4 text-sm">
+                        <p><strong>Fecha:</strong> ${date}</p>
+                        <p><strong>Hora:</strong> ${time}</p>
+                        <p><strong>Método de Pago:</strong> ${paymentMethod === 'efectivo' ? 'Efectivo' : 'Débito'}</p>
+                    </div>
+
+                    ${customerInfo}
+
+                    <div class="border-t border-b py-3 mb-4">
+                        <h4 class="font-semibold mb-2">Detalle de Compra:</h4>
+                        ${itemsList}
+                    </div>
+
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-[#5a3e2b]">
+                            Total: $${formatPrice(total)}
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center text-sm text-gray-500">
+                        <p>¡Gracias por su compra!</p>
+                        <p>Conserve esta boleta</p>
+                    </div>
+                `;
+            };
+
+            const completePurchase = (paymentMethod, customerData = null) => {
+                // Generar la boleta
+                receiptContent.innerHTML = generateReceipt(paymentMethod, customerData);
+                
+                // Limpiar el carrito
+                cart = {};
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartDisplay();
+                
+                // Cerrar modales anteriores
+                cartModal.classList.add('hidden');
+                paymentModal.classList.add('hidden');
+                debitModal.classList.add('hidden');
+                
+                // Mostrar boleta
+                receiptModal.classList.remove('hidden');
+            };
+
+            checkoutBtn.addEventListener('click', () => {
+                if (Object.keys(cart).length > 0) {
+                    const total = Object.values(cart).reduce((sum, item) => sum + (item.precio * item.quantity), 0);
+                    debitTotal.textContent = `$${formatPrice(total)}`;
+                    cartModal.classList.add('hidden');
+                    paymentModal.classList.remove('hidden');
+                }
+            });
+
+            // Event listeners para opciones de pago
+            payCash.addEventListener('click', () => {
+                completePurchase('efectivo');
+            });
+
+            payDebit.addEventListener('click', () => {
+                const total = Object.values(cart).reduce((sum, item) => sum + (item.precio * item.quantity), 0);
+                debitTotal.textContent = `$${formatPrice(total)}`;
+                paymentModal.classList.add('hidden');
+                debitModal.classList.remove('hidden');
+            });
+
+            // Formulario de débito
+            debitForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const rut = document.getElementById('rut-input').value.trim();
+                const name = document.getElementById('name-input').value.trim();
+                
+                if (rut && name) {
+                    completePurchase('debito', { rut, name });
+                    // Limpiar formulario
+                    debitForm.reset();
+                }
+            });
+
+            // Event listeners para cerrar modales
+            closePayment.addEventListener('click', () => {
+                paymentModal.classList.add('hidden');
+                cartModal.classList.remove('hidden');
+            });
+
+            closeDebit.addEventListener('click', () => {
+                debitModal.classList.add('hidden');
+                paymentModal.classList.remove('hidden');
+            });
+
+            closeReceipt.addEventListener('click', () => {
+                receiptModal.classList.add('hidden');
+            });
+
+            // Cerrar modales al hacer clic fuera
+            paymentModal.addEventListener('click', (e) => {
+                if (e.target === paymentModal) {
+                    paymentModal.classList.add('hidden');
+                    cartModal.classList.remove('hidden');
+                }
+            });
+
+            debitModal.addEventListener('click', (e) => {
+                if (e.target === debitModal) {
+                    debitModal.classList.add('hidden');
+                    paymentModal.classList.remove('hidden');
+                }
+            });
+
+            receiptModal.addEventListener('click', (e) => {
+                if (e.target === receiptModal) {
+                    receiptModal.classList.add('hidden');
+                }
+            });
+
+            // Función de imprimir boleta
+            printReceipt.addEventListener('click', () => {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Boleta de Compra</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+                                .text-center { text-align: center; }
+                                .font-bold { font-weight: bold; }
+                                .mb-4 { margin-bottom: 16px; }
+                                .py-1 { padding: 4px 0; }
+                                .border-t { border-top: 1px solid #ccc; }
+                                .border-b { border-bottom: 1px solid #ccc; }
+                                .py-3 { padding: 12px 0; }
+                                .text-right { text-align: right; }
+                                .text-2xl { font-size: 24px; }
+                                .mt-6 { margin-top: 24px; }
+                                .text-sm { font-size: 14px; }
+                                .text-gray-500 { color: #666; }
+                                .bg-gray-50 { background-color: #f9f9f9; }
+                                .p-3 { padding: 12px; }
+                                .rounded { border-radius: 4px; }
+                                .flex { display: flex; }
+                                .justify-between { justify-content: space-between; }
+                            </style>
+                        </head>
+                        <body>
+                            ${receiptContent.innerHTML}
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                printWindow.print();
+            });
+
+            // Hacer funciones globales para los botones del carrito
+            window.addToCart = addToCart;
+            window.removeFromCart = removeFromCart;
+
+            // Inicializar
+            updateCartCount();
+            updateCartDisplay();
+            cargarProductos();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97aabb56a621b526',t:'MTc1NzEyNzc5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script src="js/carrito.js"></script>
 </html>
