@@ -148,5 +148,52 @@
 
     <script src="js/Principal.js"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97aabb56a621b526',t:'MTc1NzEyNzc5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-<script src="js/carrito.js"></script>
+<script>
+    // Selecciona el elemento de input del RUT por su ID.
+const rutInput = document.getElementById('rut-input');
+
+// Agrega un escuchador de eventos para el evento 'input'.
+// El evento 'input' se dispara cada vez que el valor del elemento cambia.
+rutInput.addEventListener('input', (event) => {
+    // Obtiene el valor actual del input.
+    let rut = event.target.value;
+
+    // 1. Limpia el valor del RUT: elimina cualquier carácter que no sea un dígito o 'k' (sin importar si es mayúscula o minúscula).
+    // Esto asegura que solo se procesen los caracteres válidos.
+    rut = rut.replace(/[^0-9kK]+/g, '');
+
+    // 2. Limita la longitud máxima del RUT a 9 caracteres (8 dígitos + dígito verificador).
+    // Esto evita que el usuario ingrese un RUT demasiado largo.
+    if (rut.length > 9) {
+        rut = rut.slice(0, 9);
+    }
+
+    // 3. Formatea el RUT:
+    let formattedRut = '';
+    // Obtiene el dígito verificador (último carácter).
+    const verifierDigit = rut.slice(-1).toUpperCase();
+    // Obtiene el resto del RUT (los dígitos numéricos).
+    const numericPart = rut.slice(0, -1);
+
+    // Itera sobre la parte numérica desde el final para agregar los puntos.
+    for (let i = numericPart.length - 1, j = 0; i >= 0; i--, j++) {
+        // Agrega un punto cada 3 dígitos, excepto para el primer grupo.
+        if (j > 0 && j % 3 === 0) {
+            formattedRut = '.' + formattedRut;
+        }
+        // Agrega el dígito actual al inicio de la cadena formateada.
+        formattedRut = numericPart.charAt(i) + formattedRut;
+    }
+
+    // 4. Combina la parte formateada con el dígito verificador, si existe.
+    if (verifierDigit) {
+        // Agrega un guion antes del dígito verificador.
+        formattedRut += '-' + verifierDigit;
+    }
+
+    // 5. Asigna el valor formateado al campo de entrada.
+    event.target.value = formattedRut;
+});
+
+</script>
 </html>

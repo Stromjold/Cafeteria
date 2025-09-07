@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             empleadoEditForm.querySelector('input[name="rut_edit"]').value = empleado.rut;
             empleadoEditForm.querySelector('input[name="correo_edit"]').value = empleado.correo;
             empleadoEditForm.querySelector('select[name="tipo_edit"]').value = empleado.rol;
+            empleadoEditForm.querySelector('input[name="pin_edit"]').value = empleado.pin; // Agrega esta línea
             editFields.style.display = 'block';
           } else {
             alert("No se encontró un empleado con ese ID.");
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const rut_edit = empleadoEditForm.querySelector('input[name="rut_edit"]').value;
       const correo_edit = empleadoEditForm.querySelector('input[name="correo_edit"]').value;
       const tipo_edit = empleadoEditForm.querySelector('select[name="tipo_edit"]').value;
+      const pin_edit = empleadoEditForm.querySelector('input[name="pin_edit"]').value; // Agrega esta línea
 
       const formData = new FormData();
       formData.append('id_personal', id_personal);
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('rut', rut_edit);
       formData.append('correo', correo_edit);
       formData.append('rol', tipo_edit);
+      formData.append('pin', pin_edit); // Agrega esta línea
 
       try {
         const response = await fetch('PHP/editar_empleado.php', {
@@ -170,6 +173,7 @@ if (empleadoEditForm && buscarBtn) {
           empleadoEditForm.querySelector('input[name="rut_edit"]').value = empleado.rut;
           empleadoEditForm.querySelector('input[name="correo_edit"]').value = empleado.correo;
           empleadoEditForm.querySelector('select[name="tipo_edit"]').value = empleado.rol;
+          empleadoEditForm.querySelector('input[name="pin_edit"]').value = empleado.pin; // Agrega esta línea
           editFields.style.display = 'block';
         } else {
           alert("No se encontró un empleado con ese ID.");
@@ -191,6 +195,7 @@ if (empleadoEditForm && buscarBtn) {
     const rut_edit = empleadoEditForm.querySelector('input[name="rut_edit"]').value;
     const correo_edit = empleadoEditForm.querySelector('input[name="correo_edit"]').value;
     const tipo_edit = empleadoEditForm.querySelector('select[name="tipo_edit"]').value;
+    const pin_edit = empleadoEditForm.querySelector('input[name="pin_edit"]').value; // Agrega esta línea
 
     const formData = new FormData();
     formData.append('id_personal', id_personal);
@@ -198,6 +203,7 @@ if (empleadoEditForm && buscarBtn) {
     formData.append('rut', rut_edit);
     formData.append('correo', correo_edit);
     formData.append('rol', tipo_edit);
+    formData.append('pin', pin_edit); // Agrega esta línea
 
     try {
       const response = await fetch('PHP/editar_empleado.php', {
