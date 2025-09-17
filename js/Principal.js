@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
+    
     // 💡 NUEVA FUNCIÓN: Ahora esta función carga y renderiza los productos
     const cargarYRenderizarProductos = () => {
         cargarProductosDesdeLocalStorage(); // Esto llena `productosData` con los datos del localStorage
@@ -77,15 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success && data.productos.length > 0) {
             data.productos.forEach(producto => {
                 const productCard = document.createElement('div');
-                productCard.className = 'bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105';
+                productCard.className = 'bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 relative group';
                 productCard.innerHTML = `
                     <img src="${producto.enlace_imagen}" alt="${producto.nombre}" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-[#5a3e2b] mb-2">${producto.nombre}</h3>
                         <p class="text-gray-600 mb-4">${producto.proveedor}</p>
-                        <p class="text-2xl font-bold text-gray-800">$${new Intl.NumberFormat('es-CL').format(producto.precio_unitario)}</p>
+                        <p class="text-2xl font-bold text-gray-800">$${producto.precio_unitario.toLocaleString('es-ES', { minimumFractionDigits: 0 })}</p>
                         <button class="mt-4 w-full bg-[#7c5d4b] text-white py-2 rounded-lg font-semibold hover:bg-[#5a3e2b] transition-colors">Añadir al Carrito</button>
                     </div>
+                    <button class="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 delete-product-btn" data-product-id="${producto.id_producto}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 `;
                 productosContainer.appendChild(productCard);
 
@@ -94,15 +100,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     const productToAdd = {
                         id: producto.id_producto,
                         nombre: producto.nombre,
-                        precio: parseFloat(producto.precio_unitario)
+                        // Al añadir al carrito, el precio debe ser un número
+                        precio: producto.precio_unitario
                     };
                     addToCart(productToAdd);
+                });
+                // 💡 Pega aquí el código que cortaste
+                const deleteButton = productCard.querySelector('.delete-product-btn');
+                deleteButton.addEventListener('click', (event) => {
+                    const productId = event.currentTarget.getAttribute('data-product-id');
+                    
+                    // Filtra los productos para eliminar el que coincide con el ID
+                    productosData.productos = productosData.productos.filter(p => p.id_producto !== parseInt(productId));
+                    
+                    // Actualiza localStorage con la nueva lista de productos
+                    localStorage.setItem('productos', JSON.stringify(productosData.productos));
+                    
+                    // 💡 NUEVO: Elimina visualmente el elemento del DOM directamente
+                    const productElement = event.currentTarget.closest('.bg-white.rounded-lg.shadow-md');
+                    if (productElement) {
+                        productElement.remove();
+                    }
+
+                    // Muestra una notificación de confirmación
+                    showNotification(`Producto eliminado.`);
                 });
             });
         } else {
             productosContainer.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles en este momento.</p>';
         }
     };
+
+    
 
     const updateCartCount = () => {
         const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
@@ -111,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('es-CL').format(price);
+    // Convierte el número a una cadena de texto con formato de miles
+    return price.toLocaleString('es-ES', { minimumFractionDigits: 0 });
     };
 
     const addToCart = (product) => {

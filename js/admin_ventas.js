@@ -63,14 +63,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
+    * @description Elimina un producto de localStorage.
+    * **NUEVA FUNCIÓN**
+    * @param {string} productId - El ID del producto a eliminar.
+    */
+    const deleteProduct = (productId) => {
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const updatedProducts = productos.filter(p => p.id_producto != productId);
+        localStorage.setItem('productos', JSON.stringify(updatedProducts));
+
+        loadProducts();
+
+        window.dispatchEvent(new Event('productosActualizados'));
+
+        alert('Producto eliminado con éxito.');
+    };
+
+    /**
      * @description Obtiene los productos y llena la tabla de inventario.
+     * **MODIFICADO**: Ahora incluye un botón de eliminar.
      */
     const loadProducts = async () => {
-        const inventoryTableBody = document.getElementById('inventoryTableBody');
+        const inventoryTableBody = document.getElementById('inventoryTableBody'); // <-- Agrega esta línea si no la tienes en la parte superior
         try {
-            const response = await fetch('PHP/obtener_inventario.php');
-            const products = await response.json();
+            const products = JSON.parse(localStorage.getItem('productos')) || [];
             inventoryTableBody.innerHTML = '';
+
             if (products.length > 0) {
                 products.forEach(product => {
                     const row = document.createElement('tr');
@@ -78,18 +96,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${product.nombre}</td>
                         <td>${product.proveedor}</td>
                         <td>${product.id_producto}</td>
-                        <td>${product.fecha_vencimiento}</td>
-                        <td>${product.cantidad}</td>
-                        <td>$${parseFloat(product.precio_unitario).toFixed(2)}</td>
+                        <td>${product.fecha_vencimiento || 'N/A'}</td>
+                        <td>${product.cantidad || 'N/A'}</td>
+                        <td>$${product.precio_unitario.toLocaleString('es-ES')}</td>
+                        <td><button class="delete-btn bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600" data-id="${product.id_producto}">Eliminar</button></td>
                     `;
                     inventoryTableBody.appendChild(row);
                 });
+
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = e.target.dataset.id;
+                        if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                            deleteProduct(productId);
+                        }
+                    });
+                });
             } else {
-                inventoryTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay productos en el inventario.</td></tr>';
+                inventoryTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No hay productos en el inventario.</td></tr>';
             }
         } catch (error) {
             console.error('Error al cargar productos:', error);
-            alert('Error al cargar el inventario. Verifique la conexión y los archivos PHP.');
+            alert('Error al cargar el inventario. Verifique los datos en localStorage.');
         }
     };
 
@@ -200,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productName = document.getElementById('productName').value;
         const productId = document.getElementById('productId').value;
         const selectedSupplier = document.getElementById('selectedSupplier').value;
-        const unitPrice = document.getElementById('unitPrice').value;
+        const unitPrice = document.getElementById('unitPrice').value.replace(/\./g, '');
         const productImage = document.getElementById('productImage').value;
 
         // Crear un objeto producto
