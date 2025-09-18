@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Recolectar los datos del formulario
         const productName = document.getElementById('productName').value;
-        const productId = document.getElementById('productId').value;
+        const productId = Date.now().toString();
         const selectedSupplier = document.getElementById('selectedSupplier').value;
         const unitPrice = document.getElementById('unitPrice').value.replace(/\./g, '');
         const productImage = document.getElementById('productImage').value;

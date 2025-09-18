@@ -15,12 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         productos: []
     };
 
+    // Carga los productos guardados en localStorage
     const cargarProductosDesdeLocalStorage = () => {
-        const productosGuardados = JSON.parse(localStorage.getItem('productos')) || [];
-        if (productosGuardados.length > 0) {
-            productosData.productos = productosGuardados;
-        } else {
-            // Si no hay productos en localStorage, usa los productos por defecto
+        const productosGuardados = JSON.parse(localStorage.getItem('productos'));
+        
+        if (!productosGuardados) {
             productosData.productos = [
                 {
                     id_producto: 1,
@@ -65,11 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     enlace_imagen: "https://primerocafe.com.mx/wp-content/uploads/2019/10/receta-para-preparar-cafe-ristretto-1200x500.jpg"
                 }
             ];
+            // Guarda la lista por defecto en localStorage solo si no existía
+            localStorage.setItem('productos', JSON.stringify(productosData.productos));
+        } else {
+            // Si hay productos en localStorage, los asigna a productosData
+            productosData.productos = productosGuardados;
         }
     };
     
-    
-    // 💡 NUEVA FUNCIÓN: Ahora esta función carga y renderiza los productos
+    // Función principal para cargar y renderizar los productos
     const cargarYRenderizarProductos = () => {
         cargarProductosDesdeLocalStorage(); // Esto llena `productosData` con los datos del localStorage
         productosContainer.innerHTML = ''; // Limpia el contenedor de productos
@@ -105,23 +108,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     addToCart(productToAdd);
                 });
-                // 💡 Pega aquí el código que cortaste
+                
                 const deleteButton = productCard.querySelector('.delete-product-btn');
                 deleteButton.addEventListener('click', (event) => {
                     const productId = event.currentTarget.getAttribute('data-product-id');
                     
-                    // Filtra los productos para eliminar el que coincide con el ID
+                    // 1. Filtra los productos para eliminar el que coincide con el ID
                     productosData.productos = productosData.productos.filter(p => p.id_producto !== parseInt(productId));
-                    
-                    // Actualiza localStorage con la nueva lista de productos
+
+                    // 2. Guarda la nueva lista de productos en localStorage para que el cambio sea permanente
                     localStorage.setItem('productos', JSON.stringify(productosData.productos));
                     
-                    // 💡 NUEVO: Elimina visualmente el elemento del DOM directamente
+                    // 3. Elimina visualmente el elemento del DOM directamente
                     const productElement = event.currentTarget.closest('.bg-white.rounded-lg.shadow-md');
                     if (productElement) {
                         productElement.remove();
-                    }
-
+                    }                    
                     // Muestra una notificación de confirmación
                     showNotification(`Producto eliminado.`);
                 });
@@ -130,8 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productosContainer.innerHTML = '<p class="text-center text-gray-500">No hay productos disponibles en este momento.</p>';
         }
     };
-
-    
 
     const updateCartCount = () => {
         const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
@@ -455,16 +455,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </html>
         `);
         printWindow.document.close();
-        printWindow.print();
+        printWindow.print(); 
     });
 
     // Hacer funciones globales para los botones del carrito
-    window.addToCart = addToCart;
-    window.removeFromCart = removeFromCart;
+    window.addToCart = addToCart; // 💡 NUEVO
+    window.removeFromCart = removeFromCart; // 💡 NUEVO
 
     // Inicializar
-    cargarProductosDesdeLocalStorage(); // Cargar productos al inicio
-    updateCartCount();
-    updateCartDisplay();
-    cargarProductos();
+    cargarYRenderizarProductos(); // Llama a la función que carga y renderiza
+    updateCartCount(); // Actualiza el contador del carrito
+    updateCartDisplay(); // Muestra los items en el carrito
 });
